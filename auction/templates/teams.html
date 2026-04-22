@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Team Squads</title>
+
+{% load static %}
+
+<style>
+
+/* 🔥 FONT */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+/* 🔥 BACKGROUND (BRIGHT + CLEAR STADIUM) */
+body {
+    margin:0;
+    padding:20px;
+    font-family: 'Poppins', sans-serif;
+    color:white;
+
+    /* 🔥 LESS DARK OVERLAY (more visible) */
+    background:
+        linear-gradient(rgba(2,6,23,0.25), rgba(0,0,0,0.35)), /* 👈 lighter */
+        url("{% static 'images/stadium.jpg' %}");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* 🔥 SOFT CINEMATIC LIGHT (no dark corners) */
+body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+
+    /* 👇 softer radial (less darkness) */
+    background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.25));
+
+    z-index:-1;
+}
+
+/* 🔥 TITLE */
+h1 {
+    text-align:center;
+    color:#00eaff;
+    font-size:42px;
+    margin-bottom:50px;
+    letter-spacing:2px;
+    text-shadow: 0 0 35px rgba(0,234,255,1);
+}
+
+/* 🔥 GRID */
+.teams-container {
+    display:flex;
+    flex-wrap:wrap;
+    gap:35px;
+    justify-content:center;
+}
+
+/* ===== TEAM CARD (FULL TRANSPARENT) ===== */
+.team-card {
+    width:300px;
+    padding:25px;
+    border-radius:22px;
+    text-align:center;
+    text-decoration:none;
+    color:white;
+    position:relative;   /* 🔥 IMPORTANT FOR LIVE BADGE */
+    overflow:hidden;
+    transition:0.3s;
+
+    /* ❌ REMOVE EVERYTHING */
+    background: none !important;
+    background-color: transparent !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    /* 🔥 ONLY SOFT GLOW */
+    filter: drop-shadow(0 0 12px rgba(0,234,255,0.4));
+}
+
+/* 🔥 HOVER FLOAT */
+.team-card:hover {
+    transform: translateY(-10px) scale(1.05);
+
+    filter: drop-shadow(0 0 25px rgba(0,234,255,0.9))
+            drop-shadow(0 0 50px rgba(0,234,255,0.5));
+}
+
+/* ❌ REMOVE ALL EXTRA LAYERS */
+.team-card::before,
+.team-card::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ===== LIVE BADGE (FIXED POSITION) ===== */
+.live-badge {
+    position:absolute;
+    top:12px;
+    right:12px;   /* 🔥 RIGHT SIDE (change to left if needed) */
+
+    background:red;
+    padding:5px 12px;
+    font-size:12px;
+    border-radius:20px;
+    font-weight:600;
+
+    z-index:2;
+
+    animation: blink 1s infinite;
+
+    /* 🔥 GLOW */
+    box-shadow:
+        0 0 10px red,
+        0 0 20px rgba(255,0,0,0.6);
+}
+
+/* 🔥 BLINK */
+@keyframes blink {
+    0% {opacity:1;}
+    50% {opacity:0.4;}
+    100% {opacity:1;}
+}
+
+/* ===== LOGO ===== */
+.team-logo-big {
+    width:95px;
+    height:95px;
+    border-radius:50%;
+    border:none;
+
+    box-shadow:
+        0 0 20px #00eaff,
+        0 0 40px rgba(0,234,255,0.6);
+
+    margin-bottom:15px;
+    transition:0.3s;
+}
+
+.team-card:hover .team-logo-big {
+    transform: scale(1.15);
+}
+
+/* ===== TEXT ===== */
+.team-header h2 {
+    font-size:22px;
+    margin:10px 0;
+    text-shadow:0 0 15px rgba(0,0,0,1);
+}
+
+.team-header p {
+    color:#00ff88;
+    font-size:18px;
+    font-weight:600;
+    text-shadow:0 0 15px rgba(0,0,0,1);
+}
+
+.player-count {
+    color:#00eaff;
+    font-size:14px;
+    margin-top:10px;
+    text-shadow:0 0 12px rgba(0,0,0,1);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .team-card { width:45%; }
+}
+
+@media (max-width: 500px) {
+    .team-card { width:100%; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏏 TEAM SQUADS</h1>
+
+<div class="teams-container">
+
+{% for item in data %}
+
+<a href="{% url 'team_detail' item.team.id %}" class="team-card">
+
+    <div class="live-badge">LIVE</div>
+
+    <div class="team-header">
+
+        {% if item.team.logo %}
+            <img src="{{ item.team.logo.url }}" class="team-logo-big">
+        {% else %}
+            <img src="{% static 'images/default_team.png' %}" class="team-logo-big">
+        {% endif %}
+
+        <h2>{{ item.team.name }}</h2>
+
+        <p>💰 ₹{{ item.team.purse }}</p>
+
+        <div class="player-count">
+            👥 Players: {{ item.players|length }}
+        </div>
+
+    </div>
+
+</a>
+
+{% endfor %}
+
+</div>
+
+<script>
+
+/* 🔥 CLICK ANIMATION */
+document.querySelectorAll(".team-card").forEach(card => {
+    card.addEventListener("click", () => {
+        card.style.transform = "scale(0.95)";
+        setTimeout(() => {
+            card.style.transform = "";
+        }, 150);
+    });
+});
+
+/* 🔥 ENTRY ANIMATION */
+document.querySelectorAll(".team-card").forEach((card, index) => {
+    card.style.opacity = "0";
+    card.style.transform = "translateY(40px)";
+
+    setTimeout(() => {
+        card.style.transition = "0.6s ease";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
+    }, index * 120);
+});
+
+</script>
+
+</body>
+</html>

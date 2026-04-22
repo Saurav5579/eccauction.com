@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elite Cricket Auction</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #020617;
+        color: white;
+    }
+
+    /* ===== HEADER (ULTRA PREMIUM) ===== */
+    
+.header {
+    background: transparent;   /* 👈 full transparent */
+    backdrop-filter: none;     /* 👈 blur hata do */
+
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    border-bottom: none;
+}
+
+    .header img {
+        height: 70px;
+        filter: drop-shadow(0 0 8px #38bdf8);
+    }
+
+    .header span {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg,white);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+   /* ===== NAVBAR (GLASS + PREMIUM) ===== */
+.navbar {
+    background: transparent !important;
+    backdrop-filter: none !important;   /* ❌ blur hata diya */
+    padding: 14px;
+    text-align: center;
+
+    border: none !important;           /* ❌ line remove */
+    box-shadow: none !important;       /* ❌ glow remove */
+}
+
+/* LINKS */
+.navbar a {
+    color:white;
+    margin: 0 25px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* 🔥 UNDERLINE ANIMATION */
+.navbar a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #38bdf8, #00eaff);
+    left: 0;
+    bottom: -6px;
+    transition: 0.3s ease;
+}
+
+/* HOVER */
+.navbar a:hover::after {
+    width: 100%;
+}
+
+.navbar a:hover {
+    color: white;
+    text-shadow: 0 0 12px #38bdf8, 0 0 20px #00eaff;
+}
+
+/* ✅ ACTIVE LINK (CURRENT PAGE) */
+.navbar a.active {
+    color: #00eaff;
+    text-shadow: 0 0 12px #00eaff;
+}
+
+.navbar a.active::after {
+    width: 100%;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    padding: 30px;
+    text-align: center;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 18px;
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px #38bdf8;
+    color: white;
+}
+
+/* ===== MESSAGE BOX ===== */
+.message-box {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.message-box p {
+    display: inline-block;
+    background: rgba(15, 23, 42, 0.8);
+    color: #38bdf8;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(56,189,248,0.3);
+}
+
+/* ===== SOLD OVERLAY ===== */
+.sold-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, #000000ee, #000000);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.sold-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* TEXT */
+.sold-text {
+    font-size: 70px;
+    color: #00ff88;
+    text-shadow: 0 0 30px #00ff88;
+    animation: boomText 0.6s ease;
+}
+
+.sold-sub {
+    font-size: 28px;
+    margin-top: 10px;
+    color: #00eaff;
+}
+
+/* ROCKETS */
+.rocket {
+    position: absolute;
+    font-size: 50px;
+}
+
+.rocket.left {
+    left: -100px;
+    top: 50%;
+    animation: rocketLeft 1s ease forwards;
+}
+
+.rocket.right {
+    right: -100px;
+    top: 50%;
+    animation: rocketRight 1s ease forwards;
+}
+
+/* ANIMATIONS */
+@keyframes rocketLeft {
+    0% { left: -100px; }
+    70% { left: 45%; }
+    100% { left: 50%; transform: scale(0); }
+}
+
+@keyframes rocketRight {
+    0% { right: -100px; }
+    70% { right: 45%; }
+    100% { right: 50%; transform: scale(0); }
+}
+
+@keyframes boomText {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.3); }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <img src="{% static 'images/logo1.png' %}">
+    <span>Elite Cricket Championship Auction Edition-2</span>
+</div>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <a href="/" class="nav-link">🏠 Home</a>
+
+    <a href="{% url 'auction_page' %}" class="nav-link">🔥 Auction</a>
+
+    <a href="/admin/" class="nav-link">⚙️ Admin</a>
+
+<a href="/teams/" class="{% if request.path == '/teams/' %}active{% endif %}">View Teams</a>
+
+<a href="/players/" class="{% if request.path == '/players/' %}active{% endif %}">Players</a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<div class="sold-overlay" id="soldOverlay">
+    <div class="rocket left">🚀</div>
+    <div class="rocket right">🚀</div>
+
+    <h1 class="sold-text">🎉 SOLD! 🎉</h1>
+    <p class="sold-sub" id="soldTeam"></p>
+</div>
+
+<audio id="boomSound" src="{% static 'sounds/boom.mp3' %}"></audio>
+<script>
+function triggerSoldCelebration(teamName) {
+    const overlay = document.getElementById("soldOverlay");
+    const text = document.getElementById("soldTeam");
+
+    if (!overlay || !text) return; // safety
+
+    text.innerText = "Sold to " + teamName;
+
+    overlay.classList.add("active");
+
+    // 🔊 SOUND
+    const sound = document.getElementById("boomSound");
+    if (sound) sound.play().catch(() => {});
+
+    // 📳 Vibration (mobile)
+    if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+    }
+
+    // auto hide
+    setTimeout(() => {
+        overlay.classList.remove("active");
+    }, 3000);
+}
+</script>
+</body>
+</html>

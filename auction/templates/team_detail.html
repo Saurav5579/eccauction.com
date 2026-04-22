@@ -1,0 +1,304 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ team.name }} Squad</title>
+
+<style>
+
+/* ===== BODY BACKGROUND (BRIGHT STADIUM) ===== */
+body {
+    margin:0;
+    padding:20px;
+    font-family:'Segoe UI', Arial;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+        url("{% static 'images/Ground.jpg' %}");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:white;
+}
+
+/* 🔙 BACK BUTTON */
+.back-btn {
+    position:absolute;
+    top:20px;
+    left:20px;
+    color:#00eaff;
+    text-decoration:none;
+    font-weight:bold;
+    padding:6px 12px;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.back-btn:hover {
+    background:#00eaff;
+    color:#000;
+}
+
+/* ===== HEADER ===== */
+/* ===== HEADER FLEX ===== */
+.team-header {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    margin-bottom:40px;
+}
+
+/* LOGO */
+.team-logo {
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    border:3px solid #00eaff;
+    box-shadow:0 0 25px #00eaff;
+}
+
+/* TEXT BLOCK */
+.team-info {
+    text-align:left;
+}
+
+/* TEAM NAME */
+.team-name {
+    font-size:28px;
+    font-weight:bold;
+    color:#00eaff;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 25px rgba(0,234,255,0.6);
+}
+
+/* MONEY */
+.team-money {
+    margin-top:5px;
+    font-size:16px;
+    color:#00ff88;
+
+    text-shadow:0 0 10px rgba(0,255,136,0.6);
+}
+/* ===== GRID ===== */
+.players {
+    display:flex;
+    flex-wrap:wrap;
+    gap:30px;
+    justify-content:center;
+}
+
+/* ===== PLAYER CARD (PURE FLOAT CLEAN) ===== */
+.player-card {
+    width:230px;
+
+    /* ❌ FULL REMOVE */
+    background: none !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    box-shadow: none !important;
+    border: none !important;          /* 🔥 LINE REMOVE */
+    outline: none !important;
+
+    padding:22px;
+    text-align:center;
+
+    /* 🔥 SOFT GLOW FROM CONTENT */
+    filter: drop-shadow(0 0 12px rgba(0,234,255,0.4));
+
+    transition: all 0.3s ease;
+}
+
+/* 🔥 HOVER (FLOAT EFFECT) */
+.player-card:hover {
+    transform: translateY(-8px) scale(1.06);
+
+    filter: drop-shadow(0 0 25px rgba(0,234,255,0.9))
+            drop-shadow(0 0 50px rgba(0,234,255,0.5));
+}
+
+/* ❌ REMOVE ANY HIDDEN LAYERS */
+.player-card::before,
+.player-card::after {
+    display: none !important;
+    content: none !important;
+}
+/* ===== IMAGE (RECTANGLE PREMIUM 🔥) ===== */
+.player-card img {
+    width: 120px;
+    height: 150px;
+
+    object-fit: cover;
+
+    border-radius: 14px; /* 🔥 circle hata ke rectangle */
+
+    border: 3px solid #00eaff;
+
+    margin-bottom: 12px;
+
+    box-shadow:
+        0 0 15px #00eaff,
+        0 0 40px rgba(0,234,255,0.5);
+
+    transition: all 0.3s ease;
+}
+
+/* 🔥 HOVER EFFECT */
+.player-card img:hover {
+    transform: scale(1.08);
+    box-shadow:
+        0 0 25px #00eaff,
+        0 0 60px rgba(0,234,255,0.7);
+}
+.player-name {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    background: linear-gradient(90deg, #00eaff, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow:
+        0 0 10px rgba(0,234,255,0.6),
+        0 0 20px rgba(0,255,136,0.4);
+
+    margin-top: 6px;
+}
+.player-role {
+    display: inline-block;
+
+    margin-top: 6px;
+    padding: 4px 10px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    border-radius: 20px;
+
+    background: rgba(0, 234, 255, 0.15);
+    border: 1px solid #00eaff;
+
+    color: #00eaff;
+
+    box-shadow: 0 0 10px rgba(0,234,255,0.4);
+}
+.batsman {
+    background: rgba(0,255,136,0.15);
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+.bowler {
+    background: rgba(255,152,0,0.15);
+    border-color: #ff9800;
+    color: #ff9800;
+}
+
+.allrounder {
+    background: rgba(0,234,255,0.15);
+    border-color: #00eaff;
+    color: #00eaff;
+}
+
+.wicket {
+    background: rgba(232,121,249,0.15);
+    border-color: #e879f9;
+    color: #e879f9;
+}
+
+.player-price {
+    margin-top: 10px;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    color: #00ff88;
+
+    text-shadow:
+        0 0 10px rgba(0,255,136,0.8),
+        0 0 25px rgba(0,255,136,0.6),
+        0 0 50px rgba(0,255,136,0.4);
+
+    animation: pulsePrice 1.5s infinite;
+}
+
+/* 🔥 ANIMATION */
+@keyframes pulsePrice {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+.player-id {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 1px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="/teams/" class="back-btn">⬅ Back</a>
+
+<div class="team-header">
+
+    {% if team.logo %}
+        <img src="{{ team.logo.url }}" class="team-logo">
+    {% endif %}
+
+    <div class="team-info">
+        <div class="team-name">{{ team.name }}</div>
+        <div class="team-money">💰 Remaining: ₹{{ team.purse }}</div>
+    </div>
+
+</div>
+
+<div class="players">
+
+{% for player in players %}
+<div class="player-card">
+
+    {% if player.image %}
+        <img src="{{ player.image.url }}">
+    {% else %}
+        <img src="{% static 'images/default.png' %}">
+    {% endif %}
+
+    <div class="player-name">{{ player.name }}</div>
+
+    <div class="player-id">ID: {{ player.player_id }}</div>
+
+    {% with player.role|lower as role %}
+        {% if role == "batsman" %}
+            <div class="player-role batsman">🏏 BATSMAN</div>
+        {% elif role == "bowler" %}
+            <div class="player-role bowler">🎯 BOWLER</div>
+        {% elif role == "all rounder" %}
+            <div class="player-role allrounder">🔄 ALL ROUNDER</div>
+        {% elif role == "wicket keeper" %}
+            <div class="player-role wicket">🧤 WICKET KEEPER</div>
+        {% else %}
+            <div class="player-role">{{ player.role }}</div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="player-price">
+        ₹{{ player.current_bid|default:player.base_price }}
+    </div>
+
+</div>
+{% empty %}
+<p class="empty">No players in squad</p>
+{% endfor %}
+
+</div>
+
+</body>
+</html>

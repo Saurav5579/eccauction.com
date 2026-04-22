@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>All Players</title>
+
+<style>
+
+/* ===== BODY BACKGROUND (LIGHT + CLEAR) ===== */
+body {
+    margin:0;
+    padding:20px;
+    font-family:Arial;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
+        url("{% static 'images/Ground.jpg' %}");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:white;
+}
+
+/* ===== TITLE ===== */
+h1 {
+    text-align:center;
+    color:#00eaff;
+    margin-bottom:30px;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 30px rgba(0,234,255,0.6);
+}
+
+/* ===== GRID ===== */
+.players {
+    display:flex;
+    flex-wrap:wrap;
+    gap:25px;
+    justify-content:center;
+}
+
+/* ===== CARD (GLASS TRANSPARENT) ===== */
+/* ===== PLAYER CARD (100% TRANSPARENT) ===== */
+.player-card {
+    width:220px;
+
+    /* ❌ REMOVE ALL GLASS */
+    background: none !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    /* ❌ REMOVE BORDER + SHADOW */
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+
+    /* 🔥 ONLY CONTENT GLOW */
+    filter: drop-shadow(0 0 10px rgba(0,234,255,0.4));
+
+    transition:0.3s;
+}
+
+/* 🔥 HOVER (FLOAT EFFECT ONLY) */
+.player-card:hover {
+    transform: translateY(-8px) scale(1.06);
+
+    filter: drop-shadow(0 0 25px rgba(0,234,255,0.9))
+            drop-shadow(0 0 50px rgba(0,234,255,0.5));
+}
+
+/* ❌ REMOVE ANY HIDDEN LAYERS */
+.player-card::before,
+.player-card::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ===== IMAGE ===== */
+.player-card img {
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    border:3px solid #00eaff;
+
+    margin-bottom:10px;
+
+    box-shadow:
+        0 0 15px #00eaff,
+        0 0 40px rgba(0,234,255,0.4);
+}
+
+/* ===== NAME ===== */
+.player-name {
+    color:#00eaff;
+    font-weight:bold;
+    font-size:16px;
+}
+
+/* ===== ID ===== */
+.player-id {
+    font-size:12px;
+    color:#cbd5f5;
+}
+
+/* ===== ROLE ===== */
+.player-role {
+    margin-top:5px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+/* ===== ROLE COLORS ===== */
+.batsman { color:#00ff88; }
+.bowler { color:#ff9800; }
+.allrounder { color:#00eaff; }
+.wicket { color:#e879f9; }
+
+</style>
+</head>
+
+<body>
+
+<h1>🏏 ALL PLAYERS</h1>
+
+<div class="players">
+
+{% for player in players %}
+<div class="player-card">
+
+    {% if player.image %}
+        <img src="{{ player.image.url }}">
+    {% else %}
+        <img src="{% static 'images/default.png' %}">
+    {% endif %}
+
+    <div class="player-name">{{ player.name }}</div>
+
+    <div class="player-id">ID: {{ player.player_id }}</div>
+
+    {% if player.role|lower == "batsman" %}
+        <div class="player-role batsman">🏏 {{ player.role }}</div>
+
+    {% elif player.role|lower == "bowler" %}
+        <div class="player-role bowler">⚾ {{ player.role }}</div>
+
+    {% elif player.role|lower == "all rounder" %}
+        <div class="player-role allrounder">🏏 ⚾ {{ player.role }}</div>
+
+    {% elif player.role|lower == "wicket keeper" or player.role|lower == "wicket-keeper" %}
+        <div class="player-role wicket">🧤 {{ player.role }}</div>
+
+    {% else %}
+        <div class="player-role">{{ player.role }}</div>
+    {% endif %}
+
+</div>
+{% endfor %}
+
+</div>
+
+</body>
+</html>

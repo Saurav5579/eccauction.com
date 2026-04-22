@@ -1,0 +1,473 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+
+        background: url("/static/images/pic11.jpg") no-repeat center center/cover;
+        color: white;
+    }
+
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.45); /* 👈 LIGHTER */
+    z-index: -1;
+}
+
+  .home-container {
+    text-align: center;
+
+    margin-top: 0;                /* 👈 remove extra space */
+    position: relative;
+    top: -1px;                  /* 👈 upar shift 🔥 */
+}
+
+    /* 🔥 TITLE */
+    .home-title {
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: 1px;
+
+        background: linear-gradient(90deg, white);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        text-shadow: 0 0 20px rgba(56,189,248,0.4);
+    }
+
+    /* SUBTEXT */
+    .home-sub {
+        font-size: 20px;
+        color: #cbd5f5;
+        margin-top: 12px;
+    }
+
+    /* BUTTON */
+    .start-btn {
+        margin-top: 35px;
+        padding: 15px 40px;
+        font-size: 18px;
+
+        background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+        border: none;
+        border-radius: 12px;
+
+        cursor: pointer;
+        color: black;
+        font-weight: 600;
+
+        transition: 0.3s;
+    }
+
+    .start-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 25px #38bdf8;
+        color: white;
+    }
+
+    /* 🔥 EMOJI FIX */
+    .emoji {
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        color: initial !important;
+    }
+
+.franchise-section {
+    margin-top: 100px;
+    text-align: center;
+}
+
+/* TITLE */
+.franchise-title {
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 700;
+
+    background: linear-gradient(90deg, #38bdf8, white);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* GRID (PERFECT 3x2) */
+.franchise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+
+    max-width: 900px;
+    margin: auto;
+}
+
+/* CARD */
+.team-card {
+    background: none;          /* ❌ box remove */
+    backdrop-filter: none;     /* ❌ blur remove */
+    border: none;              /* ❌ border remove */
+
+    padding: 10px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+/* LOGO */
+.team-card img {
+    width: 110px;              /* 👈 size bada */
+    margin-bottom: 12px;
+
+    filter: drop-shadow(0 0 15px rgba(56,189,248,0.9));
+    transition: 0.3s ease;
+}
+/* NAME */
+.team-card h3 {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* HOVER EFFECT 🔥 */
+.team-card:hover {
+    transform: translateY(-8px) scale(1.05);
+}
+.team-card:hover img {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 25px #38bdf8);
+}
+
+/* DIFFERENT TEAM GLOW 🔥 */
+.team-card:nth-child(1):hover { box-shadow: 0 0 25px #22c55e; }
+.team-card:nth-child(2):hover { box-shadow: 0 0 25px #f59e0b; }
+.team-card:nth-child(3):hover { box-shadow: 0 0 25px #ef4444; }
+.team-card:nth-child(4):hover { box-shadow: 0 0 25px #3b82f6; }
+.team-card:nth-child(5):hover { box-shadow: 0 0 25px #a855f7; }
+.team-card:nth-child(6):hover { box-shadow: 0 0 25px #06b6d4; }
+
+/* RESPONSIVE 📱 */
+@media (max-width: 768px) {
+    .team-card img {
+        width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .franchise-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+#timer {
+    font-size: 32px;
+    font-weight: bold;
+    color: #00eaff;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 25px rgba(0,234,255,0.6);
+}
+
+.status {
+    margin-top: 10px;
+    color: orange;
+}
+
+.team-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.highlight-section {
+    text-align: center;
+    padding: 60px 20px;
+    color: white;
+}
+
+.highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.highlight-box {
+    background: rgba(0, 234, 255, 0.05);
+    border: 1px solid rgba(0,234,255,0.2);
+    padding: 20px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.highlight-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(0,234,255,0.3);
+}
+
+.highlight-box h3 {
+    color: #00eaff;
+    font-size: 28px;
+}
+
+.footer {
+    background: transparent; /* 🔥 main fix */
+    backdrop-filter: blur(10px); /* optional premium glass effect */
+    color: #ccc;
+    padding: 50px 20px 20px;
+    border-top: 1px solid rgba(0,234,255,0.2);
+}
+/* GRID */
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    align-items: flex-start; /* 🔥 fix alignment */
+}
+
+/* COLUMN ALIGN FIX */
+.footer-col {
+    text-align: left; /* 🔥 clean alignment */
+}
+
+/* HEADINGS */
+.footer-col h2,
+.footer-col h3 {
+    color: #00eaff;
+    margin-bottom: 15px;
+}
+
+/* TEXT */
+.footer-col p {
+    font-size: 14px;
+    margin: 6px 0;
+    line-height: 1.5;
+}
+
+/* LINKS */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    text-decoration: none;
+    color: #ccc;
+    transition: 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #00eaff;
+    padding-left: 5px;
+}
+
+/* SOCIAL */
+.social-links li a {
+    display: block;
+}
+
+/* 🔥 BOTTOM BLUR ONLY */
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding: 15px;
+    font-size: 13px;
+
+    background: rgba(0, 0, 0, 0.4); /* 🔥 light blur bg */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    border-top: 1px solid rgba(0,234,255,0.1);
+}
+</style>
+
+<div class="home-container">
+    
+<h2>⏳ Auction Starting In</h2>
+<div id="timer">Loading...</div>
+    <h1 class="home-title">
+        <span class="emoji">🏏</span>
+        ECC Player Auction Edition-2
+        <span class="emoji">🔥</span>
+    </h1>
+
+
+    <p class="home-sub">
+        Welcome to Elite Cricket Championshiop Auction Edition-2 Live Player Auction
+    </p>
+
+    <a href="/auction/">
+       <button class="btn" disabled>🚫 Auction Not Started</button>
+    </a>
+
+</div>
+
+
+
+<div class="franchise-section">
+
+    <h2 class="franchise-title">🏏 Auction Franchises</h2>
+
+    <div class="franchise-grid">
+
+        <a href="/team/1/" class="team-card">
+            <img src="/static/images/team1.png">
+            <h3>Alpha Strikers</h3>
+        </a>
+
+        <a href="/team/2/" class="team-card">
+            <img src="/static/images/team2.png">
+            <h3>Raj 11</h3>
+        </a>
+
+        <a href="/team/3/" class="team-card">
+            <img src="/static/images/team3.png">
+            <h3>Spartan Warriors</h3>
+        </a>
+
+        <a href="/team/4/" class="team-card">
+            <img src="/static/images/team4.png">
+            <h3>Garuda XI</h3>
+        </a>
+
+        <a href="/team/5/" class="team-card">
+            <img src="/static/images/team5.png">
+            <h3>Night Hawks</h3>
+        </a>
+
+        <a href="/team/6/" class="team-card">
+            <img src="/static/images/team6.png">
+            <h3>Rajgarh Super Giants</h3>
+        </a>
+
+    </div>
+
+</div>
+
+<section class="highlight-section">
+
+    <h2>🏆 ECC Highlights</h2>
+
+    <div class="highlight-grid">
+
+        <div class="highlight-box">
+            <h3>120+</h3>
+            <p>Registered Players</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>6 Teams</h3>
+            <p>Competitive Franchises</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>₹35K</h3>
+            <p>Initial Purse</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Live Auction</h3>
+            <p>Real-time Bidding</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <!-- 🔥 LEFT -->
+        <div class="footer-col">
+            <h2>🏏 ECC Elite Cricket Championship</h2>
+            <p>
+                Official Player Auction Platform — Edition 2  
+                Manage players, teams, and live bidding professionally.
+            </p>
+        </div>
+
+        <!-- 🔗 QUICK LINKS -->
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Register Player</a></li>
+                <li><a href="/players/">Auction Pool</a></li>
+                <li><a href="/admin/">Admin Panel</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+            </ul>
+        </div>
+
+        <!-- 📍 ADDRESS -->
+        <div class="footer-col">
+            <h3>Address</h3>
+            <p>📍 ECC Cricket Gurukul Building</p>
+            <p>Near Old Bus Stand, Rajgarh</p>
+            <p>Sirmaur, Himachal Pradesh</p>
+            <p>India — PIN 173101</p>
+            <p>📞 +91 62300-37509</p>
+            <p>📧 ecc@auction.local</p>
+        </div>
+
+        <!-- 🌐 SOCIAL -->
+        <div class="footer-col">
+            <h3>Follow Us</h3>
+            <ul class="social-links">
+                <li><a href="#">🌐 Website</a></li>
+                <li><a href="#">📘 Facebook</a></li>
+                <li><a href="#">📸 Instagram</a></li>
+                <li><a href="#">▶ YouTube</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- 🔥 BOTTOM -->
+    <div class="footer-bottom">
+        © 2026 ECC Elite Cricket Championship — All Rights Reserved
+    </div>
+
+</footer>
+<script>
+    // 🔥 Auction date set (26 April 2026, 7:00 PM example)
+var auctionDate = new Date("2026-04-26T19:00:00").getTime();
+
+var x = setInterval(function () {
+
+    var now = new Date().getTime();
+    var distance = auctionDate - now;
+
+    // ⛔ if time passed
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("timer").innerHTML = "🚀 Auction Started!";
+        return;
+    }
+
+    // ✅ TIME CALCULATION
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // ✅ DISPLAY
+    document.getElementById("timer").innerHTML =
+        days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+}, 1000);
+</script>
+{% endblock %}
