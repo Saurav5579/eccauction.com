@@ -1,0 +1,6 @@
+media/
+players/
+teams/
+*.pyc
+__pycache__/
+db.sqlite3
