@@ -42,8 +42,8 @@ body::before {
         background: linear-gradient(90deg, white);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-
-        text-shadow: 0 0 20px rgba(56,189,248,0.4);
+        
+         text-shadow: 0 0 20px rgba(56,189,248,0.7);
     }
 
     /* SUBTEXT */
@@ -111,23 +111,46 @@ body::before {
 
 /* CARD */
 .team-card {
-    background: none;          /* ❌ box remove */
-    backdrop-filter: none;     /* ❌ blur remove */
-    border: none;              /* ❌ border remove */
+    background: none;
+    backdrop-filter: none;
+    border: none;
 
     padding: 10px;
-    transition: 0.3s ease;
     cursor: pointer;
+
+    /* 🔥 NEW ANIMATION BASE */
+    opacity: 0;
+    transform: translateY(50px);
+
+    transition: all 1s ease;
 }
+
+/* LEFT ENTRY */
+.team-card.left {
+    transform: translateX(-120px);
+}
+
+/* RIGHT ENTRY */
+.team-card.right {
+    transform: translateX(120px);
+}
+
+/* SHOW (जब scroll में आए) */
+.team-card.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 
 /* LOGO */
 .team-card img {
-    width: 110px;              /* 👈 size bada */
+    width: 110px;
     margin-bottom: 12px;
 
     filter: drop-shadow(0 0 15px rgba(56,189,248,0.9));
     transition: 0.3s ease;
 }
+
 /* NAME */
 .team-card h3 {
     color: white;
@@ -141,6 +164,7 @@ body::before {
 .team-card:hover {
     transform: translateY(-8px) scale(1.05);
 }
+
 .team-card:hover img {
     transform: scale(1.15);
     filter: drop-shadow(0 0 25px #38bdf8);
@@ -153,6 +177,14 @@ body::before {
 .team-card:nth-child(4):hover { box-shadow: 0 0 25px #3b82f6; }
 .team-card:nth-child(5):hover { box-shadow: 0 0 25px #a855f7; }
 .team-card:nth-child(6):hover { box-shadow: 0 0 25px #06b6d4; }
+
+/* 🔥 STAGGER DELAY (slow cinematic feel) */
+.team-card:nth-child(1) { transition-delay: 0.2s; }
+.team-card:nth-child(2) { transition-delay: 0.4s; }
+.team-card:nth-child(3) { transition-delay: 0.6s; }
+.team-card:nth-child(4) { transition-delay: 0.7s; }
+.team-card:nth-child(5) { transition-delay: 0.8s; }
+.team-card:nth-child(6) { transition-delay: 0.9s; }
 
 /* RESPONSIVE 📱 */
 @media (max-width: 768px) {
@@ -186,13 +218,14 @@ body::before {
     text-decoration: none;
     color: inherit;
 }
-
+/* SECTION */
 .highlight-section {
     text-align: center;
     padding: 60px 20px;
     color: white;
 }
 
+/* GRID */
 .highlight-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -200,24 +233,108 @@ body::before {
     margin-top: 30px;
 }
 
+/* 🔥 LINK RESET (IMPORTANT) */
+.highlight-grid a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* BOX BASE */
 .highlight-box {
     background: rgba(0, 234, 255, 0.05);
     border: 1px solid rgba(0,234,255,0.2);
     padding: 20px;
-    border-radius: 10px;
-    transition: 0.3s;
+    border-radius: 12px;
+
+    cursor: pointer; /* 👈 clickable feel */
+
+    /* ANIMATION BASE */
+    opacity: 0;
+    transform: translateY(40px);
+
+    transition: all 0.8s ease;
 }
 
+/* LEFT ENTRY */
+.highlight-box.left {
+    transform: translateX(-120px);
+}
+
+/* RIGHT ENTRY */
+.highlight-box.right {
+    transform: translateX(120px);
+}
+
+/* SHOW */
+.highlight-box.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 🔥 HOVER UPGRADE */
 .highlight-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 15px rgba(0,234,255,0.3);
+    transform: translateY(-8px) scale(1.06);
+    box-shadow: 
+        0 0 15px rgba(0,234,255,0.4),
+        0 0 35px rgba(0,234,255,0.3);
+
+    border-color: rgba(0,234,255,0.5);
 }
 
+/* CLICK EFFECT 🔥 */
+.highlight-box:active {
+    transform: scale(0.95);
+}
+
+/* TEXT */
 .highlight-box h3 {
     color: #00eaff;
     font-size: 28px;
+    margin-bottom: 8px;
+
+    text-shadow: 0 0 10px rgba(0,234,255,0.6);
 }
 
+.highlight-box p {
+    color: #ccc;
+}
+
+/* 🔴 LIVE BLINK + GLOW */
+.highlight-box.live h3 {
+    color: #ffd700;
+    animation: blink 1s infinite;
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffcc00;
+}
+
+@keyframes blink {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ⛔ DISABLED CARD (OPTIONAL) */
+.highlight-box.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* STAGGER DELAY (SMOOTH PREMIUM) */
+.highlight-box:nth-child(1) { transition-delay: 0.3s; }
+.highlight-box:nth-child(2) { transition-delay: 0.6s; }
+.highlight-box:nth-child(3) { transition-delay: 0.9s; }
+.highlight-box:nth-child(4) { transition-delay: 1.2s; }
+
+/* RESPONSIVE 📱 */
+@media (max-width: 900px) {
+    .highlight-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .highlight-grid {
+        grid-template-columns: 1fr;
+    }
+}
 .footer {
     background: transparent; /* 🔥 main fix */
     backdrop-filter: blur(10px); /* optional premium glass effect */
@@ -291,25 +408,242 @@ body::before {
 
     border-top: 1px solid rgba(0,234,255,0.1);
 }
+
+/* INITIAL STATE */
+.animate-title,
+.animate-sub,
+.animate-count,
+.animate-btn {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* TITLE */
+.animate-title.show {
+    animation: fadeZoom 1s ease forwards;
+}
+
+/* SUB TEXT */
+.animate-sub.show {
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.4s;
+}
+
+/* COUNTDOWN */
+.animate-count.show {
+    animation: glowFade 1s ease forwards;
+    animation-delay: 0.2s;
+}
+
+/* BUTTON INITIAL STATE */
+.animate-btn {
+    opacity: 0;
+    transform: scale(0.7);
+}
+
+/* BUTTON SHOW ANIMATION 🔥 */
+.animate-btn.show {
+    animation: popIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: 1s;
+}
+
+/* BUTTON BASE */
+.btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: white;
+
+    box-shadow: 0 0 15px rgba(59,130,246,0.5);
+    transition: all 0.3s ease;
+}
+
+/* 🔥 HOVER EFFECT */
+.btn:hover {
+    transform: scale(1.12);   /* 👈 thoda bada */
+    box-shadow: 
+        0 0 20px rgba(6,182,212,0.8),
+        0 0 40px rgba(6,182,212,0.4);
+
+    background: linear-gradient(135deg, #06b6d4, #3b82f6); /* reverse glow */
+}
+
+/* 🔥 KEYFRAMES UPDATED */
+
+/* TITLE ZOOM */
+@keyframes fadeZoom {
+    from { opacity: 0; transform: scale(0.75); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* TEXT SLIDE */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* COUNTDOWN GLOW */
+@keyframes glowFade {
+    from { opacity: 0; transform: translateY(50px); }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        text-shadow: 0 0 20px #22d3ee, 0 0 40px rgba(34,211,238,0.5);
+    }
+}
+
+/* 🔥 BUTTON POP (UPGRADED) */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.6) translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.15) translateY(-5px);
+    }
+    70% {
+        transform: scale(0.95) translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+  
+
+
+  /* WRAPPER */
+.timer-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    margin-top: 25px;
+}
+
+/* SIDE (LOGO HOLDER) */
+.timer-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TITLE */
+.timer-title {
+    color: white;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+/* TIMER TEXT */
+.timer-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00eaff;
+
+    text-shadow: 0 0 10px #00eaff;
+}
+
+/* LOGO */
+.timer-logo {
+    width: 65px;
+    height: 65px;
+
+    filter: drop-shadow(0 0 10px #00eaff);
+    transition: 0.3s ease;
+}
+
+/* ENTRY ANIMATION */
+.timer-logo.left {
+    animation: slideLeft 1s ease;
+}
+
+.timer-logo.right {
+    animation: slideRight 1s ease;
+}
+
+/* HOVER 🔥 */
+.timer-logo:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px #00eaff);
+}
+
+/* ANIMATIONS */
+@keyframes slideLeft {
+    from { opacity: 0; transform: translateX(-60px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(60px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* OPTIONAL PULSE 🔥 */
+.timer-logo {
+    animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* RESPONSIVE 📱 */
+@media (max-width: 600px) {
+    .timer-logo {
+        width: 45px;
+        height: 45px;
+    }
+
+    .timer-text {
+        font-size: 22px;
+    }
+}
 </style>
 
-<div class="home-container">
-    
-<h2>⏳ Auction Starting In</h2>
-<div id="timer">Loading...</div>
-    <h1 class="home-title">
+<div class="timer-wrapper">
+
+    <!-- LEFT LOGO -->
+    <div class="timer-side">
+        <img src="/static/images/logo1.png" class="timer-logo left">
+    </div>
+
+    <!-- TIMER CONTENT -->
+    <div class="timer-content">
+        <h2 class="timer-title">⏳ Auction Starting In</h2>
+        <div id="timer" class="timer-text">Loading...</div>
+    </div>
+
+    <!-- RIGHT LOGO -->
+    <div class="timer-side">
+        <img src="/static/images/logo1.png" class="timer-logo right">
+    </div>
+
+</div>
+
+    <!-- TITLE -->
+    <h1 class="home-title animate-title">
         <span class="emoji">🏏</span>
         ECC Player Auction Edition-2
         <span class="emoji">🔥</span>
     </h1>
 
-
-    <p class="home-sub">
-        Welcome to Elite Cricket Championshiop Auction Edition-2 Live Player Auction
+    <!-- SUB TEXT -->
+    <p class="home-sub animate-sub">
+        Welcome to Elite Cricket Championship Auction Edition-2 Live Player Auction
     </p>
 
+    <!-- BUTTON -->
     <a href="/auction/">
-       <button class="btn" disabled>🚫 Auction Not Started</button>
+        <button class="btn animate-btn" disabled>
+            🚫 Auction Not Started
+        </button>
     </a>
 
 </div>
@@ -322,32 +656,34 @@ body::before {
 
     <div class="franchise-grid">
 
-        <a href="/team/1/" class="team-card">
+        <!-- LEFT SIDE -->
+        <a href="/team/1/" class="team-card left">
             <img src="/static/images/team1.png">
             <h3>Alpha Strikers</h3>
         </a>
 
-        <a href="/team/2/" class="team-card">
+        <a href="/team/2/" class="team-card left">
             <img src="/static/images/team2.png">
             <h3>Raj 11</h3>
         </a>
 
-        <a href="/team/3/" class="team-card">
+        <a href="/team/3/" class="team-card left">
             <img src="/static/images/team3.png">
             <h3>Spartan Warriors</h3>
         </a>
 
-        <a href="/team/4/" class="team-card">
+        <!-- RIGHT SIDE -->
+        <a href="/team/4/" class="team-card right">
             <img src="/static/images/team4.png">
             <h3>Garuda XI</h3>
         </a>
 
-        <a href="/team/5/" class="team-card">
+        <a href="/team/5/" class="team-card right">
             <img src="/static/images/team5.png">
             <h3>Night Hawks</h3>
         </a>
 
-        <a href="/team/6/" class="team-card">
+        <a href="/team/6/" class="team-card right">
             <img src="/static/images/team6.png">
             <h3>Rajgarh Super Giants</h3>
         </a>
@@ -358,34 +694,37 @@ body::before {
 
 <section class="highlight-section">
 
-    <h2>🏆 ECC Highlights</h2>
+    <h2 class="highlight-title">🏆 ECC Highlights</h2>
 
     <div class="highlight-grid">
 
-        <div class="highlight-box">
-            <h3>120+</h3>
+        <!-- 1️⃣ REGISTERED PLAYERS -->
+        <a href="/players/" class="highlight-box left">
+            <h3 class="counter" data-target="120">0+</h3>
             <p>Registered Players</p>
-        </div>
+        </a>
 
-        <div class="highlight-box">
+        <!-- 2️⃣ TEAMS -->
+        <a href="/teams/" class="highlight-box left">
             <h3>6 Teams</h3>
             <p>Competitive Franchises</p>
-        </div>
+        </a>
 
-        <div class="highlight-box">
+        <!-- 3️⃣ PURSE (optional page ya disable) -->
+        <a href="#" class="highlight-box right">
             <h3>₹35K</h3>
             <p>Initial Purse</p>
-        </div>
+        </a>
 
-        <div class="highlight-box">
+        <!-- 4️⃣ AUCTION -->
+        <a href="/auction/" class="highlight-box right live">
             <h3>Live Auction</h3>
             <p>Real-time Bidding</p>
-        </div>
+        </a>
 
     </div>
 
 </section>
-
 
 <footer class="footer">
 
@@ -469,5 +808,64 @@ var x = setInterval(function () {
         days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
 
 }, 1000);
+/* ================= TEAM CARDS ANIMATION ================= */
+const cards = document.querySelectorAll('.team-card');
+
+const cardObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        }
+    });
+}, { threshold: 0.2 });
+
+cards.forEach(card => cardObserver.observe(card));
+
+
+/* ================= PAGE LOAD ANIMATION ================= */
+window.addEventListener("load", () => {
+    document.querySelectorAll(
+        ".animate-title, .animate-sub, .animate-count, .animate-btn"
+    ).forEach(el => {
+        el.classList.add("show");
+    });
+});
+
+
+/* ================= HIGHLIGHT BOX ANIMATION ================= */
+const boxes = document.querySelectorAll('.highlight-box');
+
+const highlightObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        }
+    });
+}, { threshold: 0.2 });
+
+boxes.forEach(box => highlightObserver.observe(box));
+
+
+/* ================= COUNTER ANIMATION ================= */
+const counters = document.querySelectorAll(".counter");
+
+counters.forEach(counter => {
+    let target = +counter.getAttribute("data-target");
+    let count = 0;
+
+    const update = () => {
+        let increment = target / 80;
+
+        if (count < target) {
+            count += increment;
+            counter.innerText = Math.ceil(count) + "+";
+            requestAnimationFrame(update);
+        } else {
+            counter.innerText = target + "+";
+        }
+    };
+
+    update();
+});
 </script>
 {% endblock %}

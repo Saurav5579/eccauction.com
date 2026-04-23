@@ -33,6 +33,8 @@ urlpatterns = [
 
 
     path('retain-player/<int:player_id>/', views.retain_player, name='retain_player'),
+
+    path('reset-auction/', views.reset_full_auction, name='reset_auction'),
 ]
 
 

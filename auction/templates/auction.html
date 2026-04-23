@@ -191,7 +191,7 @@ body::before {
     width: 100%;
     max-width: 420px;
     margin-left: auto;
-    text-align: left;
+    text-align: center;   /* ✅ center align (better UI) */
 }
 
 /* PLAYER ID */
@@ -213,27 +213,53 @@ body::before {
     font-size: 38px;
     font-weight: bold;
     text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    margin-bottom: 6px;
 }
 
-/* ROLE */
+/* ===============================
+   🔥 ROLE + BASE PRICE INLINE
+================================ */
 .player-role {
+    display: inline-block;
     color: #38bdf8;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 5px;
 }
 
-/* PRICE */
-.price-box {
-    margin-top: 20px;
+.base-price {
+    display: inline-block;
+    color: #22c55e;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 8px;
 }
 
+/* PRICE BOX */
+.price-box {
+    margin-top: 18px;
+}
+
+/* ===============================
+   🔥 CURRENT BID (POSITION FIX)
+================================ */
 .current-bid {
     font-size: 48px;
     color: #22c55e;
     font-weight: bold;
+
+    margin-top: 10px;
+    margin-bottom: 28px;   /* 🔥 MAIN FIX (button se door) */
+
+    text-align: center;
+
     text-shadow:
-        0 0 10px #22c55e,
-        0 0 25px #22c55e;
+        0 0 10px rgba(34,197,94,0.9),
+        0 0 30px rgba(34,197,94,0.6);
+}
+
+/* OPTIONAL FINE TUNE */
+.current-bid {
+    transform: translateY(-4px);   /* 🔥 slight upar shift */
 }
 
 /* TEAM */
@@ -253,34 +279,48 @@ body::before {
     position: relative;
     z-index: 20;
 
-    background: linear-gradient(45deg, #ff3b3b, #ff0000);
+    /* 🔥 PREMIUM GRADIENT */
+    background: linear-gradient(135deg, #ff3b3b, #ff0000);
     color: white;
+
     border: none;
-    padding: 12px 28px;
+
+    /* ✅ SIZE FIX */
+    padding: 12px 24px;
+    min-width: 160px;   /* 👈 SAME SIZE ALWAYS */
+    height: 45px;       /* 👈 FIX HEIGHT */
+
     border-radius: 30px;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+
     cursor: pointer;
 
+    /* 🔥 GLOW */
     box-shadow:
         0 0 15px rgba(255,0,0,0.6),
         0 0 35px rgba(255,0,0,0.4);
 
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
     overflow: hidden;
+
+    display: inline-flex;        /* 👈 CENTER TEXT */
+    align-items: center;
+    justify-content: center;
 }
 
-/* 🔥 HOVER */
+/* 🔥 HOVER EFFECT */
 .sold-btn:hover {
     transform: scale(1.08);
     box-shadow:
         0 0 25px rgba(255,0,0,0.9),
-        0 0 60px rgba(255,0,0,0.5);
+        0 0 50px rgba(255,0,0,0.5);
 }
 
-/* 🔥 CLICK */
+/* 🔥 CLICK EFFECT */
 .sold-btn:active {
     transform: scale(0.95);
-    box-shadow: 0 0 10px rgba(255,0,0,0.8);
 }
 
 /* 🔥 RIPPLE */
@@ -980,81 +1020,314 @@ body::before {
     100% { opacity: 0.3; }
 }
 
-.retain-btn {
-    position: relative;
-    z-index: 60; /* 🔥 click issue fix */
+/* ===============================
+   🔥 PLAYER ACTIONS (MAIN)
+================================ */
+.player-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* ===============================
+   🔥 2 COLUMN LAYOUT
+================================ */
+.action-grid {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.action-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+}
+
+/* ===============================
+   🟢 SOLD BUTTON (GREEN PREMIUM)
+================================ */
+.sold-btn {
+    background: linear-gradient(45deg, #22c55e, #16a34a);  /* ✅ proper green */
+    color: white;
+
+    padding: 12px 24px;
+    min-width: 180px;
+    height: 48px;
+
+    border-radius: 30px;
+    border: none;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 0 15px rgba(34,197,94,0.7),
+        0 0 35px rgba(34,197,94,0.4);
+
+    transition: all 0.3s ease;
+}
+
+
+/* 🔥 HOVER EFFECT */
+.sold-btn:hover {
+    transform: scale(1.08);
+    box-shadow:
+        0 0 25px rgba(34,197,94,1),
+        0 0 60px rgba(34,197,94,0.6);
+}
+
+
+/* 🔥 CLICK EFFECT */
+.sold-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===============================
+   🔄 RESET BUTTON
+================================ */
+.reset-btn {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+
+    padding: 10px 24px;
+    min-width: 140px;
+    height: 40px;
+
+    border-radius: 25px;
+    border: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 12px rgba(99,102,241,0.6);
+    transition: 0.3s;
+}
+
+.reset-btn:hover {
+    transform: scale(1.08);
+    box-shadow:
+        0 0 25px rgba(99,102,241,1),
+        0 0 45px rgba(99,102,241,0.5);
+}
+
+.reset-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===============================
+   🔒 TEAM RETAIN BUTTON (MAIN)
+================================ */
+.team-retain-btn {
+    grid-column: span 2;
+
+    margin-top: 10px;
+    padding: 10px;
+
+    border-radius: 12px;
+    border: none;
 
     background: linear-gradient(45deg, #ffd700, #ffb300);
     color: black;
+
     font-weight: bold;
-    padding: 12px 22px;
-    border-radius: 12px;
-    margin-left: 10px;
     cursor: pointer;
 
-    border: none;
-    outline: none;
-
     box-shadow:
-        0 0 10px rgba(255,215,0,0.7),
-        0 0 25px rgba(255,215,0,0.5);
+        0 0 12px rgba(255,215,0,0.7),
+        0 0 30px rgba(255,215,0,0.4);
 
     transition: all 0.25s ease;
-    overflow: hidden;
 }
 
-/* 🔥 HOVER EFFECT */
-.retain-btn:hover {
-    transform: scale(1.08);
+.team-retain-btn:hover {
+    transform: scale(1.05);
     box-shadow:
         0 0 20px rgba(255,215,0,1),
-        0 0 50px rgba(255,215,0,0.6);
+        0 0 40px rgba(255,215,0,0.6);
 }
 
-/* 🔥 CLICK EFFECT */
-.retain-btn:active {
+.team-retain-btn:active {
     transform: scale(0.95);
-    box-shadow: 0 0 10px rgba(255,215,0,0.8);
 }
 
-/* 🔥 RIPPLE EFFECT */
-.retain-btn::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    background: rgba(255,255,255,0.5);
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.4s, height 0.4s;
-}
-
-.retain-btn:active::after {
-    width: 200px;
-    height: 200px;
-}
-
-/* ❌ DISABLED STATE */
-.retain-btn:disabled {
+.team-retain-btn:disabled {
     background: #777;
     color: #ccc;
     cursor: not-allowed;
     box-shadow: none;
 }
 
+/* ===============================
+   🔥 ACTIVE TEAM HIGHLIGHT
+================================ */
 .team-btn.active-team {
-    box-shadow: 0 0 20px #00eaff, 0 0 40px rgba(0,234,255,0.4);
+    box-shadow:
+        0 0 20px #00eaff,
+        0 0 40px rgba(0,234,255,0.4);
     transform: scale(1.05);
 }
 
+/* ===============================
+   🎯 SPIN BUTTON
+================================ */
 #go-to-spin-btn:hover {
     transform: scale(1.08);
     box-shadow:
         0 0 25px rgba(34,197,94,1),
         0 0 60px rgba(34,197,94,0.6);
 }
+
+/* ===============================
+   🏆 CURRENT TEAM DISPLAY
+================================ */
+.current-team {
+    text-align: center;
+    margin-bottom: 15px;
+
+    color: #00eaff;
+    font-weight: bold;
+    font-size: 18px;
+
+    text-shadow: 0 0 10px rgba(0,234,255,0.6);
+}
+
+/* ===============================
+   📱 RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+    .action-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.6);
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-box {
+    background: #0f172a;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+
+    color: white;
+    width: 300px;
+
+    box-shadow: 0 0 25px rgba(0,234,255,0.4);
+}
+
+/* BUTTONS */
+.modal-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirm-btn {
+    background: #ef4444;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+}
+
+.cancel-btn {
+    background: gray;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+}
+
+
+/* ===============================
+   🔥 TOP BUTTON ALIGN (FINAL)
+================================ */
+.top-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ===============================
+   🔥 SAME SIZE FORCE
+================================ */
+.sold-btn,
+.full-reset-btn {
+    width: 180px;        /* ✅ exact equal */
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+}
+
+
+/* ===============================
+   🔥 FULL RESET FINAL
+================================ */
+.full-reset-btn {
+    background: linear-gradient(45deg, #ef4444, #b91c1c);
+    color: white;
+
+    border-radius: 30px;
+    border: none;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    text-decoration: none;   /* 🔥 safety */
+
+    box-shadow:
+        0 0 15px rgba(239,68,68,0.8),
+        0 0 35px rgba(239,68,68,0.5);
+
+    transition: all 0.3s ease;
+}
+
+/* hover */
+.full-reset-btn:hover {
+    transform: scale(1.08);
+}
+
+/* click */
+.full-reset-btn:active {
+    transform: scale(0.95);
+}
+
+
 </style>
 
 <h1 class="auction-title">
@@ -1113,43 +1386,56 @@ body::before {
 
             </div>
 
-            <!-- TEAM -->
-            {% if player.team %}
-                <div class="current-team">
-                    🏆 {{ player.team.name }}
-                </div>
-            {% endif %}
 
-            <!-- 🔥 BUTTONS -->
-            <div class="player-actions">
+<!-- TEAM (ONLY AFTER SOLD / RETAIN) -->
+{% if player.is_sold %}
+    <div class="current-team">
+        🏆 {{ player.team.name }}
+    </div>
+{% endif %}
 
-                {% if not player.is_sold %}
+<div class="player-actions">
 
-                    <button class="sold-btn" onclick="sellPlayer('{{ player.id }}')">
-                        🔥 SOLD PLAYER
-                    </button>
+{% if not player.is_sold %}
 
-                    {% if player.team %}
-                        <button onclick="retainPlayer('{{ player.id }}')" class="retain-btn">
-    🔒 RETAIN (₹3500)
+    <div class="action-grid">
+
+        <!-- 🔴 LEFT SIDE -->
+        <div class="action-col">
+
+            <!-- 🔥 TOP ACTION BUTTONS -->
+            <div class="top-actions">
+
+                <button class="sold-btn" onclick="sellPlayer('{{ player.id }}')">
+                    🔥 SOLD PLAYER
+                </button>
+
+                <!-- 🔥 FULL RESET BUTTON -->
+               <button class="full-reset-btn"
+        onclick="if(confirm('⚠️ Full auction reset karna hai?')) { window.location.href='/reset-auction/'; }">
+    ♻️ FULL RESET
 </button>
-                    {% else %}
-                        <button class="retain-btn disabled" disabled>
-                            ❌ NO TEAM
-                        </button>
-                    {% endif %}
-
-                {% else %}
-
-                    {% if player.is_retained %}
-                        <div class="sold retained">🔒 RETAINED</div>
-                    {% else %}
-                        <div class="sold">🔥 SOLD</div>
-                    {% endif %}
-
-                {% endif %}
 
             </div>
+
+            <!-- 🔄 NORMAL RESET -->
+            <button class="reset-btn" onclick="openResetModal()">
+                🔄 RESET BID
+            </button>
+
+        </div>
+
+    </div>
+
+{% else %}
+    {% if player.is_retained %}
+        <div class="sold retained">🔒 RETAINED</div>
+    {% else %}
+        <div class="sold">🔥 SOLD</div>
+    {% endif %}
+{% endif %}
+
+</div>
 
         </div> <!-- player-details -->
 
@@ -1174,41 +1460,38 @@ body::before {
     {% for team in teams %}
     <div class="team-box team-{{ forloop.counter }}">
 
-        <!-- 🔥 BID BUTTONS (FINAL GRID SYSTEM) -->
-        <div class="team-bid-options">
+<!-- 🔥 BID BUTTONS (FINAL GRID SYSTEM) -->
+<div class="team-bid-options">
 
-            <!-- 🟢 LOW -->
-                 <button onclick="quickBid('{{ player.id }}','{{ team.id }}',500)">
-                ₹500
-            </button>
+    <!-- BID BUTTONS -->
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',500)">₹500</button>
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1000)">₹1000</button>
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1500)">₹1500</button>
 
-            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1000)">
-                ₹1000
-            </button>
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2000)">₹2000</button>
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2500)">₹2500</button>
 
-            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1500)">
-                ₹1500
-            </button>
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3000)">₹3000</button>
+    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3500)">₹3500</button>
 
-            <!-- 🟡 MID -->
-            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2000)">
-                ₹2000
-            </button>
+<!-- 🔥 ALWAYS VISIBLE RETAIN BUTTON -->
+<button 
+    class="team-retain-btn"
+    data-team="{{ team.id }}"
+    onclick="retainFromTeam('{{ player.id }}','{{ team.id }}', event)"
 
-            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2500)">
-                ₹2500
-            </button>
+    {% if team.retain_count >= 3 %}
+        disabled
+    {% endif %}
+>
+    {% if team.retain_count >= 3 %}
+        ❌ LIMIT REACHED
+    {% else %}
+        🔒 RETAIN (₹3500)
+    {% endif %}
+</button>
+</div>
 
-            <!-- 🔴 HIGH -->
-            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3000)">
-                ₹3000
-            </button>
-
-            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3500)">
-                ₹3500
-            </button>
-
-        </div>
 <!-- 🔥 TEAM BUTTON -->
 <button class="team-btn"
     data-id="{{ team.id }}"
@@ -1320,6 +1603,21 @@ body::before {
 </form>
 <div class="fireworks"></div>
 <canvas id="fireworksCanvas"></canvas>
+
+
+<div id="resetModal" class="modal">
+    <div class="modal-box">
+        <h3>⚠️ Reset Bid?</h3>
+        <p>Current bid ₹0 pe reset ho jayegi</p>
+
+        <div class="modal-actions">
+            <button onclick="confirmReset()" class="confirm-btn">YES RESET</button>
+            <button onclick="closeResetModal()" class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
 <script>
 /* ===============================
    🔥 GLOBAL
@@ -1561,7 +1859,7 @@ animateFireworks();
 
 }
 /* ===============================
-   🔥 QUICK BID (FINAL FIXED 🔥)
+   🔥 QUICK BID (FINAL PRO FIXED)
 ================================ */
 function quickBid(playerId, teamId, amount) {
 
@@ -1582,7 +1880,7 @@ function quickBid(playerId, teamId, amount) {
 
     teamId = String(teamId);
 
-    // ❌ block only LOWER (equal allowed for 3500)
+    // ❌ block lower bid
     if (newBid < current) {
         showPopup("⚠️ Higher bid required");
         return;
@@ -1598,30 +1896,35 @@ function quickBid(playerId, teamId, amount) {
     }
 
     // ===============================
-    // 🎡 SPIN LOGIC (FIXED)
+    // 🔥 MAIN FIX (IMPORTANT)
+    // ===============================
+    window.lastTeamId = teamId;   // ✅ FINAL SOURCE (used everywhere)
+
+    // ===============================
+    // 🔥 SHOW RETAIN BUTTON (NO REFRESH)
+    // ===============================
+    if (newBid >= 3500) {
+        document.querySelectorAll(".team-retain-btn").forEach(btn => {
+            btn.style.display = "block";
+        });
+    }
+
+    // ===============================
+    // 🎡 SPIN LOGIC
     // ===============================
     if (!window.spinCandidates) window.spinCandidates = [];
-    if (!window.selectedSpinTeams) window.selectedSpinTeams = [];
 
     if (newBid === 3500) {
 
-        // ✅ add team (no duplicate)
         if (!window.spinCandidates.includes(teamId)) {
             window.spinCandidates.push(teamId);
         }
 
         showPopup("🎯 Added for Spin");
 
-        // ❌ REMOVE AUTO OPEN (MAIN FIX)
-        // ✅ instead show button
-
         if (window.spinCandidates.length >= 2) {
-
             let btn = document.getElementById("go-to-spin-btn");
-
-            if (btn) {
-                btn.style.display = "block";
-            }
+            if (btn) btn.style.display = "block";
         }
 
     } else {
@@ -1641,12 +1944,9 @@ function quickBid(playerId, teamId, amount) {
             btn.classList.add("active-team");
         }
 
-        // keep all enabled (IMPORTANT)
         btn.style.opacity = "1";
         btn.style.pointerEvents = "auto";
     });
-
-    window.lastTeamId = teamId;
 
     // ===============================
     // 💰 SERVER UPDATE
@@ -1662,9 +1962,9 @@ function quickBid(playerId, teamId, amount) {
     .then(res => res.json())
     .then(data => {
 
-        // 🔥 ignore fail for 3500
         if (!data.success) {
 
+            // ⚡ allow spin case
             if (newBid === 3500) {
                 console.log("⚡ Ignored fail for 3500 (spin case)");
                 return;
@@ -2097,21 +2397,27 @@ function getCSRFToken() {
     });
     return cookieValue;
 }
-
 /* ===============================
-   🔥 SELL PLAYER FINAL
+   🔥 SELL PLAYER (UPDATED)
 ================================ */
 function sellPlayer(playerId) {
 
+    // ✅ SAME SOURCE AS QUICK BID
     let teamId = window.lastTeamId;
 
     if (!teamId) {
-        alert("⚠️ Pehle team select ya bid karo!");
+        alert("⚠️ Pehle bid karo (team select karo)!");
         return;
     }
 
     let currentBidEl = document.getElementById("current-bid-" + playerId);
-    let currentBid = currentBidEl.innerText.replace('₹','');
+
+    if (!currentBidEl) {
+        alert("❌ Bid not found!");
+        return;
+    }
+
+    let currentBid = parseInt(currentBidEl.innerText.replace(/[^\d]/g, "")) || 0;
 
     fetch(`/sell-player/${playerId}/`, {
         method: "POST",
@@ -2119,7 +2425,7 @@ function sellPlayer(playerId) {
             "Content-Type": "application/x-www-form-urlencoded",
             "X-CSRFToken": getCSRFToken()
         },
-        body: `team_id=${parseInt(teamId)}&bid=${currentBid}`
+        body: `team_id=${teamId}&bid=${currentBid}`
     })
     .then(res => res.json())
     .then(data => {
@@ -2132,28 +2438,41 @@ function sellPlayer(playerId) {
                 data.player_image
             );
 
+            // 💰 PURSE UPDATE
             let purseEl = document.getElementById("team-purse-" + teamId);
             if (purseEl) {
-                let current = parseInt(purseEl.innerText.replace('₹','')) || 0;
-                purseEl.innerText = "₹" + (current - parseInt(currentBid));
+                let current = parseInt(purseEl.innerText.replace(/[^\d]/g, "")) || 0;
+                purseEl.innerText = "₹" + (current - currentBid);
             }
 
-        
+            // 🔥 reset selection
+            window.lastTeamId = null;
+
+        } else {
+            alert(data.error || "❌ Sell failed");
         }
     })
     .catch(err => {
         console.error("❌ SELL ERROR:", err);
     });
 }
-function retainPlayer() {
 
-    let teamId = "{{ player.team.id }}";
-    let playerId = "{{ player.id }}";
+/* ===============================
+   🔥 RETAIN FROM TEAM (FINAL PRO)
+================================ */
+function retainFromTeam(playerId, teamId, event) {
 
-    if (!teamId) {
-        alert("⚠️ Team assign nahi hai!");
+    if (!event) {
+        console.error("❌ Event not passed");
         return;
     }
+
+    const btn = event.currentTarget;
+
+    if (!btn || btn.disabled) return;
+
+    btn.disabled = true;
+    btn.innerText = "Processing...";
 
     fetch(`/retain-player/${playerId}/`, {
         method: "POST",
@@ -2174,16 +2493,45 @@ function retainPlayer() {
                 data.player_image
             );
 
+            document.querySelectorAll(
+                `.team-retain-btn[data-team="${teamId}"]`
+            ).forEach(b => {
+
+                const wrapper = b.closest(".retain-wrapper");
+                const countEl = wrapper?.querySelector(".retain-count");
+
+                let count = data.retain_count || 0;
+
+                if (countEl) {
+                    countEl.innerText = `${count}/3`;
+                }
+
+                if (count >= 3) {
+                    b.disabled = true;
+                    b.innerText = "❌ LIMIT REACHED";
+                    b.style.background = "#6b7280";
+                } else {
+                    b.disabled = false;
+                    b.innerText = "🔒 RETAIN (₹3500)";
+                }
+            });
+
         } else {
-            alert(data.error);
+
+            alert(data.error || "❌ Retain failed");
+
+            btn.disabled = false;
+            btn.innerText = "🔒 RETAIN (₹3500)";
         }
     })
     .catch(err => {
+
         console.error("❌ RETAIN ERROR:", err);
+
+        btn.disabled = false;
+        btn.innerText = "🔒 RETAIN (₹3500)";
     });
 }
-
-
 /* ===============================
    🔒 RETAIN ANIMATION (FULL PRO)
 ================================ */
@@ -2324,6 +2672,65 @@ function startConfetti() {
 
     setTimeout(() => clearInterval(interval), 2000);
 }
+
+
+/* ===============================
+   🔥 OPEN MODAL
+================================ */
+function openResetModal() {
+    document.getElementById("resetModal").style.display = "flex";
+}
+
+/* ===============================
+   🔥 CLOSE MODAL
+================================ */
+function closeResetModal() {
+    document.getElementById("resetModal").style.display = "none";
+}
+
+/* ===============================
+   🔥 CONFIRM RESET (UPDATED)
+================================ */
+function confirmReset() {
+
+    // ❌ close modal first
+    closeResetModal();
+
+    // 🔥 CLEAR TEAM SELECTION (IMPORTANT)
+    window.selectedTeamId = null;
+
+    let select = document.getElementById("teamSelect");
+    if (select) select.value = "";
+
+    // 🔥 HIDE SELECTED TEAM UI
+    let teamDisplay = document.getElementById("selectedTeamDisplay");
+    if (teamDisplay) teamDisplay.style.display = "none";
+
+    // 🔥 OPTIONAL: RESET BID UI (FRONTEND ONLY)
+    let bidEl = document.querySelector("[id^='current-bid-']");
+    if (bidEl) bidEl.innerText = "₹0";
+
+    // 🔥 FINAL: BACKEND RESET
+    setTimeout(() => {
+        window.location.href = "/auction/?reset=1";
+    }, 300);
+}
+
+
+document.getElementById("teamSelect")?.addEventListener("change", function() {
+    let selectedOption = this.options[this.selectedIndex];
+
+    if (this.value) {
+        document.getElementById("selectedTeamDisplay").style.display = "block";
+        document.getElementById("teamNameText").innerText = selectedOption.text;
+
+        window.selectedTeamId = this.value;
+    } else {
+        document.getElementById("selectedTeamDisplay").style.display = "none";
+        window.selectedTeamId = null;
+    }
+});
+
 </script>
 
 {% endblock %}

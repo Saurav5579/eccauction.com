@@ -42,18 +42,15 @@ h1 {
     justify-content:center;
 }
 
-/* ===== CARD (GLASS TRANSPARENT) ===== */
-/* ===== PLAYER CARD (100% TRANSPARENT) ===== */
+/* ===== PLAYER CARD (TRANSPARENT) ===== */
 .player-card {
     width:220px;
 
-    /* ❌ REMOVE ALL GLASS */
     background: none !important;
     background-color: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 
-    /* ❌ REMOVE BORDER + SHADOW */
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
@@ -62,13 +59,12 @@ h1 {
     padding:20px;
     text-align:center;
 
-    /* 🔥 ONLY CONTENT GLOW */
     filter: drop-shadow(0 0 10px rgba(0,234,255,0.4));
 
     transition:0.3s;
 }
 
-/* 🔥 HOVER (FLOAT EFFECT ONLY) */
+/* 🔥 HOVER */
 .player-card:hover {
     transform: translateY(-8px) scale(1.06);
 
@@ -76,25 +72,39 @@ h1 {
             drop-shadow(0 0 50px rgba(0,234,255,0.5));
 }
 
-/* ❌ REMOVE ANY HIDDEN LAYERS */
+/* ❌ REMOVE LAYERS */
 .player-card::before,
 .player-card::after {
     display: none !important;
     content: none !important;
 }
 
-/* ===== IMAGE ===== */
+/* ===== IMAGE (RECTANGLE 🔥) ===== */
 .player-card img {
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    border:3px solid #00eaff;
+    width:110px;
+    height:140px;           /* 👈 rectangle ban gaya */
+    
+    border-radius:12px;     /* ❌ circle hat gaya */
+    
+    object-fit: cover;
 
-    margin-bottom:10px;
+    border:2px solid #00eaff;
+    margin-bottom:12px;
 
     box-shadow:
-        0 0 15px #00eaff,
-        0 0 40px rgba(0,234,255,0.4);
+        0 0 12px #00eaff,
+        0 0 35px rgba(0,234,255,0.5);
+
+    transition:0.3s ease;
+}
+
+/* 🔥 IMAGE HOVER EFFECT */
+.player-card:hover img {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 20px #00eaff,
+        0 0 50px rgba(0,234,255,0.8);
 }
 
 /* ===== NAME ===== */

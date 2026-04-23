@@ -2,15 +2,38 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Player, Team
 
+from django.shortcuts import render, redirect
+
+from django.shortcuts import redirect
+
 
 # 🏠 HOME
 def home(request):
     return render(request, 'home.html')
 
-
 # 🔥 AUCTION PAGE (CURRENT PLAYER)
 def auction_page(request):
-    player = Player.objects.filter(is_sold=False, is_unsold=False).order_by('id').first()
+
+    # 🔥 CURRENT PLAYER (SAFE FETCH)
+    player = Player.objects.filter(
+        is_sold=False,
+        is_unsold=False
+    ).order_by('id').first()
+
+    # 🔥 RESET BUTTON LOGIC
+    if request.GET.get("reset") == "1":
+
+        if player:
+            player.current_bid = 0
+            player.team = None              # ✅ REMOVE TEAM
+            player.is_retained = False
+            player.is_sold = False
+            player.save()
+
+        # 🔥 IMPORTANT → redirect to clean URL
+        return redirect('/auction/')
+
+    # 🔥 TEAMS (AFTER RESET)
     teams = Team.objects.all()
 
     return render(request, 'auction.html', {
@@ -182,46 +205,63 @@ def all_players(request):
     return render(request, 'all_players.html', {
         'players': players
     })
-# 🔥 RETAIN PLAYER (AUTO)
 def retain_player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
 
-    if request.method == "POST":
+    if request.method != "POST":
+        return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
-        if player.is_sold:
-            return JsonResponse({"error": "Already sold"}, status=400)
+    team_id = request.POST.get("team_id")
 
-        team_id = request.POST.get("team_id")
+    if not team_id:
+        return JsonResponse({"success": False, "error": "No team selected"})
 
-        if not team_id:
-            return JsonResponse({"error": "No team selected"}, status=400)
+    try:
+        team = Team.objects.get(id=team_id)
+    except Team.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Invalid team"})
 
-        team = get_object_or_404(Team, id=team_id)
+    # 🔥 MAIN LOGIC (MODEL HANDLE KAREGA SAB)
+    success, message = player.apply_retain(team)
 
-        retain_price = 3500
-
-        # ❌ purse check
-        if team.purse < retain_price:
-            return JsonResponse({"error": "Not enough purse"}, status=400)
-
-        # ✅ UPDATE PLAYER
-        player.current_bid = retain_price
-        player.sold_price = retain_price
-        player.is_sold = True
-        player.is_retained = True
-        player.team = team
-        player.save()
-
-        # 💰 CUT PURSE
-        team.purse -= retain_price
-        team.save()
-
+    if not success:
         return JsonResponse({
-            "success": True,
-            "player_name": player.name,
-            "team_name": team.name,
-            "player_image": player.image_url,
-            "amount": retain_price
+            "success": False,
+            "error": message
         })
 
-    return JsonResponse({"error": "Invalid request"}, status=400)
+    # 🔥 FRESH DATA (important for UI sync)
+    team.refresh_from_db()
+    player.refresh_from_db()
+
+    return JsonResponse({
+        "success": True,
+        "message": message,
+
+        "player_name": player.name,
+        "team_name": team.name,
+        "player_image": player.image_url,
+
+        "retain_count": team.retain_count,   # 🔥 UI update ke liye
+        "purse": team.purse                  # 🔥 optional (live update)
+    })
+
+def reset_full_auction(request):
+
+    # 🔥 ALL PLAYERS RESET
+    Player.objects.update(
+        current_bid=0,
+        sold_price=0,
+        team=None,
+        is_sold=False,
+        is_retained=False,
+        is_unsold=False
+    )
+
+    # 🔥 ALL TEAMS RESET
+    Team.objects.update(
+        purse=35000,
+        retain_count=0
+    )
+
+    return redirect('/auction/')
