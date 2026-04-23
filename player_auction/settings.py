@@ -30,18 +30,6 @@ INSTALLED_APPS = [
 ]
 
 
-# MIDDLEWARE
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-
 # URLS
 ROOT_URLCONF = 'player_auction.urls'
 
@@ -103,19 +91,47 @@ USE_I18N = True
 USE_TZ = True
 
 
+import os
+
 # =========================
-# STATIC FILES (IMPORTANT 🔥)
+# STATIC FILES (FINAL 🔥)
 # =========================
 
 STATIC_URL = '/static/'
 
+# Local static (development)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# (For deployment future use)
+# Production static
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# 🔥 IMPORTANT (Render fix)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+
+# =========================
+# WHITENOISE (IMPORTANT 🔥)
+# =========================
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+
+    # 🔥 add this just after security middleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    # rest same
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
+# =========================
 # DEFAULT PRIMARY KEY
+# =========================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
