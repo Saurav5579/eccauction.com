@@ -4,7 +4,6 @@ from . import views
 # MEDIA FILES
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import temp_login
 
 urlpatterns = [
     # 🏠 HOME
@@ -36,7 +35,6 @@ urlpatterns = [
 
     path('reset-auction/', views.reset_full_auction, name='reset_auction'),
 
-     path('temp-login/', temp_login),
 ]
 
 

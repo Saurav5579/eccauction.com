@@ -1455,65 +1455,66 @@ body::before {
 {% endif %}
 
 <!-- 🔥 TEAMS -->
+{% if player %}
 <div class="teams-row">
 
     {% for team in teams %}
     <div class="team-box team-{{ forloop.counter }}">
 
-<!-- 🔥 BID BUTTONS (FINAL GRID SYSTEM) -->
-<div class="team-bid-options">
+        <!-- 🔥 BID BUTTONS -->
+        <div class="team-bid-options">
 
-    <!-- BID BUTTONS -->
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',500)">₹500</button>
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1000)">₹1000</button>
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1500)">₹1500</button>
+            <!-- BID BUTTONS -->
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',500)">₹500</button>
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1000)">₹1000</button>
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',1500)">₹1500</button>
 
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2000)">₹2000</button>
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2500)">₹2500</button>
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2000)">₹2000</button>
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',2500)">₹2500</button>
 
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3000)">₹3000</button>
-    <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3500)">₹3500</button>
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3000)">₹3000</button>
+            <button onclick="quickBid('{{ player.id }}','{{ team.id }}',3500)">₹3500</button>
 
-<!-- 🔥 ALWAYS VISIBLE RETAIN BUTTON -->
-<button 
-    class="team-retain-btn"
-    data-team="{{ team.id }}"
-    onclick="retainFromTeam('{{ player.id }}','{{ team.id }}', event)"
+            <!-- 🔒 RETAIN BUTTON -->
+            <button 
+                class="team-retain-btn"
+                data-team="{{ team.id }}"
+                onclick="retainFromTeam('{{ player.id }}','{{ team.id }}', event)"
+                {% if team.retain_count >= 3 %} disabled {% endif %}
+            >
+                {% if team.retain_count >= 3 %}
+                    ❌ LIMIT REACHED
+                {% else %}
+                    🔒 RETAIN (₹3500)
+                {% endif %}
+            </button>
 
-    {% if team.retain_count >= 3 %}
-        disabled
-    {% endif %}
->
-    {% if team.retain_count >= 3 %}
-        ❌ LIMIT REACHED
-    {% else %}
-        🔒 RETAIN (₹3500)
-    {% endif %}
-</button>
-</div>
+        </div>
 
-<!-- 🔥 TEAM BUTTON -->
-<button class="team-btn"
-    data-id="{{ team.id }}"
-    data-name="{{ team.name }}"
-    onclick="selectTeam('{{ player.id }}','{{ team.id }}', event)">
+        <!-- 🔥 TEAM BUTTON -->
+        <button class="team-btn"
+            data-id="{{ team.id }}"
+            data-name="{{ team.name }}"
+            onclick="selectTeam('{{ player.id }}','{{ team.id }}', event)">
 
-    {% if team.logo %}
-        <img src="{{ team.logo.url }}" class="team-logo">
-    {% else %}
-        <img src="/static/images/default_team.png" class="team-logo">
-    {% endif %}
+            {% if team.logo %}
+                <img src="{{ team.logo.url }}" class="team-logo">
+            {% else %}
+                <img src="/static/images/default_team.png" class="team-logo">
+            {% endif %}
 
-    <div class="team-info">
-        <span class="team-name">{{ team.name }}</span><br>
-        <span id="team-purse-{{ team.id }}">₹{{ team.purse }}</span>
-    </div>
+            <div class="team-info">
+                <span class="team-name">{{ team.name }}</span><br>
+                <span id="team-purse-{{ team.id }}">₹{{ team.purse }}</span>
+            </div>
 
-</button>
+        </button>
 
     </div>
     {% endfor %}
+
 </div>
+{% endif %}
 <!-- 🎡 SPIN BOX -->
 <div id="spin-box" class="spin-overlay" style="display:none;">
 

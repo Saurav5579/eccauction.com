@@ -25,20 +25,23 @@ def auction_page(request):
 
         if player:
             player.current_bid = 0
-            player.team = None              # ✅ REMOVE TEAM
+            player.team = None
             player.is_retained = False
             player.is_sold = False
             player.save()
 
-        # 🔥 IMPORTANT → redirect to clean URL
         return redirect('/auction/')
 
-    # 🔥 TEAMS (AFTER RESET)
+    # 🔥 TEAMS
     teams = Team.objects.all()
+
+    # ✅🔥 MAIN FIX → auction status
+    auction_finished = False if player else True
 
     return render(request, 'auction.html', {
         'player': player,
-        'teams': teams
+        'teams': teams,
+        'auction_finished': auction_finished   # 🔥 IMPORTANT
     })
 
 # 🔥 PLACE BID (AUTO SPIN VERSION)
