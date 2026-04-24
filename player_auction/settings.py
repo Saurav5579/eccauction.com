@@ -98,19 +98,19 @@ USE_TZ = True
 # STATIC FILES (FINAL 🔥)
 # =========================
 
+
 STATIC_URL = '/static/'
 
-# Local static (development)
+# ✅ Safe check (Render warning fix)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
-]
+] if os.path.exists(os.path.join(BASE_DIR, 'static')) else []
 
 # Production static (Render)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # 🔥 WhiteNoise (for static on Render)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 
 # =========================
 # WHITENOISE (IMPORTANT 🔥)
