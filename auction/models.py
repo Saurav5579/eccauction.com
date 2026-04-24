@@ -1,6 +1,10 @@
 from django.db import models, transaction
+from cloudinary.models import CloudinaryField   # 👈 IMPORTANT
 
 
+# =========================
+# TEAM MODEL
+# =========================
 class Team(models.Model):
     name = models.CharField(max_length=100)
 
@@ -10,13 +14,16 @@ class Team(models.Model):
     # 🔒 RETAIN LIMIT TRACK
     retain_count = models.IntegerField(default=0)
 
-    # 🖼️ LOGO
-    logo = models.ImageField(upload_to='teams/', null=True, blank=True)
+    # 🖼️ LOGO (Cloudinary)
+    logo = CloudinaryField('image', null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
+# =========================
+# PLAYER MODEL
+# =========================
 class Player(models.Model):
     player_id = models.CharField(max_length=20, unique=True)
 
@@ -41,45 +48,41 @@ class Player(models.Model):
     is_unsold = models.BooleanField(default=False)
     is_retained = models.BooleanField(default=False)
 
-    # 🖼️ IMAGE
-    image = models.ImageField(upload_to='players/', null=True, blank=True)
+    # 🖼️ IMAGE (Cloudinary)
+    image = CloudinaryField('image', null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.player_id} - {self.name}"
 
-    # ✅ SAFE IMAGE
+    # ✅ SAFE IMAGE URL
     @property
     def image_url(self):
         if self.image:
             return self.image.url
-        return "/static/images/default.png"
+        return "https://res.cloudinary.com/demo/image/upload/sample.jpg"  # fallback
 
     # ======================================
-    # 🔒 RETAIN FUNCTION (FULL SAFE)
+    # 🔒 RETAIN FUNCTION
     # ======================================
     def apply_retain(self, team, price=3500):
 
         with transaction.atomic():
 
-            # 🔄 latest data
             self.refresh_from_db()
             team.refresh_from_db()
 
-            # ❌ already sold / retained
             if self.is_sold or self.is_retained:
                 return False, "Player already sold"
 
-            # ❌ retain limit
             if team.retain_count >= 3:
                 return False, "Retain limit reached"
 
-            # ❌ purse check
             if team.purse < price:
                 return False, "Not enough purse"
 
-            # ✅ APPLY RETAIN
+            # ✅ APPLY
             self.is_retained = True
             self.is_sold = True
             self.team = team
@@ -95,7 +98,7 @@ class Player(models.Model):
             return True, "Retained successfully"
 
     # ======================================
-    # 🔥 RESET PLAYER (BONUS)
+    # 🔄 RESET PLAYER
     # ======================================
     def reset_player(self):
 
