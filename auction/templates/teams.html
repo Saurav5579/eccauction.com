@@ -175,6 +175,23 @@ h1 {
 @media (max-width: 500px) {
     .team-card { width:100%; }
 }
+
+.team-logo-big {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+
+    margin-bottom: 10px;
+
+    filter: drop-shadow(0 0 10px rgba(0, 234, 255, 0.6));
+
+    transition: 0.3s;
+}
+
+.team-card:hover .team-logo-big {
+    transform: scale(1.1);
+}
+
 </style>
 </head>
 
@@ -192,11 +209,8 @@ h1 {
 
     <div class="team-header">
 
-        {% if item.team.logo %}
-            <img src="{{ item.team.logo.url }}" class="team-logo-big">
-        {% else %}
-            <img src="{% static 'images/default_team.png' %}" class="team-logo-big">
-        {% endif %}
+        <!-- ✅ Cloudinary SAFE LOGO -->
+        <img src="{{ item.team.logo_url }}" class="team-logo-big" alt="{{ item.team.name }}">
 
         <h2>{{ item.team.name }}</h2>
 

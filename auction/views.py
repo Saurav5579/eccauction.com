@@ -5,11 +5,15 @@ from .models import Player, Team
 from django.shortcuts import render, redirect
 
 from django.shortcuts import redirect
-
+from django.shortcuts import render
+import random
 
 # 🏠 HOME
 def home(request):
     return render(request, 'home.html')
+from django.shortcuts import render
+import random
+
 
 # 🔥 AUCTION PAGE (CURRENT PLAYER)
 def auction_page(request):
@@ -19,6 +23,21 @@ def auction_page(request):
         is_sold=False,
         is_unsold=False
     ).order_by('id').first()
+
+    # 🔥 ALL TEAMS
+    teams = list(Team.objects.all())
+
+    # 🔥 RANDOM 2 TEAMS FOR LOGO (safe)
+    random_teams = []
+    if len(teams) >= 2:
+        random_teams = random.sample(teams, 2)
+    else:
+        random_teams = teams
+
+    return render(request, 'auction.html', {
+        'player': player,
+        'teams': random_teams
+    })
 
     # 🔥 RESET BUTTON LOGIC
     if request.GET.get("reset") == "1":
@@ -32,16 +51,37 @@ def auction_page(request):
 
         return redirect('/auction/')
 
-    # 🔥 TEAMS
-    teams = Team.objects.all()
+from django.shortcuts import render
+from .models import Player, Team
+import random
 
-    # ✅🔥 MAIN FIX → auction status
+
+def auction_page(request):
+
+    # 🔥 CURRENT PLAYER
+    player = Player.objects.filter(
+        is_sold=False,
+        is_unsold=False
+    ).order_by('id').first()
+
+    # 🔥 ALL TEAMS
+    teams = list(Team.objects.all())
+
+    # 🔥 RANDOM TEAMS (for header / timer logos)
+    random_teams = random.sample(teams, min(len(teams), 2)) if teams else []
+
+    # 🔥 MAIN LOGO TEAM (first team fallback)
+    main_team = teams[0] if teams else None
+
+    # 🔥 AUCTION STATUS
     auction_finished = False if player else True
 
     return render(request, 'auction.html', {
         'player': player,
-        'teams': teams,
-        'auction_finished': auction_finished   # 🔥 IMPORTANT
+        'teams': teams,                 # buttons ke liye
+        'random_teams': random_teams,   # timer logos ke liye
+        'team': main_team,              # header logo ke liye
+        'auction_finished': auction_finished
     })
 
 # 🔥 PLACE BID (AUTO SPIN VERSION)

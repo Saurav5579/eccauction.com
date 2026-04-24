@@ -1,10 +1,11 @@
 from django.db import models, transaction
-from cloudinary.models import CloudinaryField   # 👈 IMPORTANT
+from cloudinary.models import CloudinaryField
 
 
-# =========================
-# TEAM MODEL
-# =========================
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+
 class Team(models.Model):
     name = models.CharField(max_length=100)
 
@@ -20,6 +21,17 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
+    # ✅ SAFE LOGO URL
+    @property
+    def logo_url(self):
+        try:
+            if self.logo and hasattr(self.logo, 'url'):
+                return self.logo.url
+        except Exception:
+            pass
+
+        # 🔥 fallback image (better than demo)
+        return "https://via.placeholder.com/200x200.png?text=TEAM"
 
 # =========================
 # PLAYER MODEL
@@ -61,13 +73,12 @@ class Player(models.Model):
     def image_url(self):
         if self.image:
             return self.image.url
-        return "https://res.cloudinary.com/demo/image/upload/sample.jpg"  # fallback
+        return "https://res.cloudinary.com/demo/image/upload/sample.jpg"
 
     # ======================================
     # 🔒 RETAIN FUNCTION
     # ======================================
     def apply_retain(self, team, price=3500):
-
         with transaction.atomic():
 
             self.refresh_from_db()
@@ -90,7 +101,6 @@ class Player(models.Model):
             self.sold_price = price
             self.save()
 
-            # 💰 TEAM UPDATE
             team.purse -= price
             team.retain_count += 1
             team.save()
@@ -98,10 +108,9 @@ class Player(models.Model):
             return True, "Retained successfully"
 
     # ======================================
-    # 🔄 RESET PLAYER
+    # 🔥 RESET PLAYER
     # ======================================
     def reset_player(self):
-
         self.current_bid = 0
         self.sold_price = None
         self.team = None
