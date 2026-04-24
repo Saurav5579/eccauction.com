@@ -94,8 +94,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-import os
-
 # =========================
 # STATIC FILES (FINAL 🔥)
 # =========================
@@ -107,10 +105,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# Production static
+# Production static (Render)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# 🔥 IMPORTANT (Render fix)
+# 🔥 WhiteNoise (for static on Render)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
@@ -140,10 +138,11 @@ MIDDLEWARE = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-cloudinary.config(
-    cloud_name = os.getenv("CLOUD_NAME"),
-    api_key = os.getenv("API_KEY"),
-    api_secret = os.getenv("API_SECRET")
-)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv("CLOUD_NAME"),
+    'API_KEY': os.getenv("API_KEY"),
+    'API_SECRET': os.getenv("API_SECRET"),
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
