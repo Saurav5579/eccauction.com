@@ -1596,8 +1596,9 @@ body::before {
 <!-- 🔥 POPUP -->
 <div id="bid-popup" class="bid-popup"></div>
 
-
-<audio id="sold-sound" src="{% static 'sounds/fire1.mp3' %}" preload="auto"></audio>
+<audio id="sold-sound" preload="auto">
+    <source src="https://res.cloudinary.com/djlg89cz8/video/upload/q_auto,f_auto/v1777011723/fire1_syyptd.mp3" type="audio/mpeg">
+</audio>
 <!-- 🔐 CSRF (IMPORTANT) -->
 <form style="display:none;">
     {% csrf_token %}
@@ -1747,10 +1748,9 @@ canvas.height = window.innerHeight;
 
 let fireworks = [];
 
-/* 🔊 FIREWORK SOUNDS */
 const fireSounds = [
-    "/static/sounds/fire1.mp3",
-    "/static/sounds/fire2.mp3"
+    "https://res.cloudinary.com/djlg89cz8/video/upload/q_auto,f_auto/v1777011723/fire1_syyptd.mp3",
+    "https://res.cloudinary.com/djlg89cz8/video/upload/q_auto,f_auto/v1777011724/fire2_bsrth8.mp3"
 ];
 
 /* ===============================
