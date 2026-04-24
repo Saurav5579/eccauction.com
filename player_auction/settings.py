@@ -1,9 +1,9 @@
-"""
-Django settings for player_auction project.
-"""
-
 from pathlib import Path
 import os
+import cloudinary
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # BASE DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +25,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'cloudinary',            # 👈 add karo
+    'cloudinary_storage',    # 👈 add karo
 
     'auction',
 ]
@@ -135,3 +138,12 @@ MIDDLEWARE = [
 # DEFAULT PRIMARY KEY
 # =========================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+cloudinary.config(
+    cloud_name = os.getenv("CLOUD_NAME"),
+    api_key = os.getenv("API_KEY"),
+    api_secret = os.getenv("API_SECRET")
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
