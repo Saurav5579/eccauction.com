@@ -152,14 +152,7 @@ body::before {
     transition: 0.3s ease;
 }
 
-/* NAME */
-.team-card h3 {
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
 
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
-}
 
 /* HOVER EFFECT 🔥 */
 .team-card:hover {
@@ -187,6 +180,33 @@ body::before {
 .team-card:nth-child(5) { transition-delay: 0.8s; }
 .team-card:nth-child(6) { transition-delay: 0.9s; }
 
+.team-card h3 {
+    font-family: 'Orbitron', sans-serif;  /* 🔥 premium font */
+
+    font-size: 18px;
+    font-weight: 700;
+
+    letter-spacing: 2px;   /* 🔥 spacing = luxury feel */
+    text-transform: uppercase;
+
+    color: #ffffff;
+
+    margin-top: 8px;
+
+    /* 🔥 GLOW EFFECT */
+    text-shadow:
+        0 0 6px rgba(0,255,255,0.6),
+        0 0 12px rgba(0,255,255,0.4);
+
+    transition: 0.3s ease;
+}
+.team-card:hover h3 {
+    transform: scale(1.08);
+
+    text-shadow:
+        0 0 10px rgba(0,255,255,1),
+        0 0 20px rgba(0,255,255,0.7);
+}
 /* RESPONSIVE 📱 */
 @media (max-width: 768px) {
     .team-card img {
@@ -607,7 +627,7 @@ body::before {
     }
 }
 .special-team img {
-    width: 150px;     /* 👈 width badayi */
+    width: 180px;     /* 👈 width badayi */
     height: auto;     /* 👈 height auto (important) */
 
     transform: scale(1.05);
@@ -615,7 +635,7 @@ body::before {
 }
 
 </style>
-
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <div class="timer-wrapper">
 
     <!-- LEFT LOGO -->
@@ -668,33 +688,33 @@ body::before {
         <!-- LEFT SIDE -->
        <a href="/team/1/" class="team-card left">
     <img src="https://res.cloudinary.com/djlg89cz8/image/upload/v1777010968/team1_hzugd2.png">
-    <h3>Alpha Strikers</h3>
+    <h3>ALPHA STRIKERS</h3>
 </a>
 
  <a href="/team/2/" class="team-card left special-team">
     <img src="https://res.cloudinary.com/djlg89cz8/image/upload/w_200,q_auto,f_auto/v1777010968/team2_a7qn9g.png">
-    <h3>Raj 11</h3>
+    <h3>RAJ 11</h3>
 </a>
 
       <a href="/team/3/" class="team-card left">
     <img src="https://res.cloudinary.com/djlg89cz8/image/upload/w_200,q_auto,f_auto/v1777010967/team3_w8oyeg.png">
-    <h3>Spartan Warriors</h3>
+    <h3>SPARTAN WARRIORS</h3>
 </a>
 
       <!-- RIGHT SIDE -->
 <a href="/team/4/" class="team-card right">
     <img src="https://res.cloudinary.com/djlg89cz8/image/upload/w_200,q_auto,f_auto/v1777010967/team4_np5kpv.png">
-    <h3>Garuda XI</h3>
+    <h3>GARUDA XI</h3>
 </a>
 
        <a href="/team/5/" class="team-card right">
     <img src="https://res.cloudinary.com/djlg89cz8/image/upload/w_200,q_auto,f_auto/v1777010968/team5_j8saye.png">
-    <h3>Night Hawks</h3>
+    <h3>NIGHT HAWKS</h3>
 </a>
 
        <a href="/team/6/" class="team-card right">
     <img src="https://res.cloudinary.com/djlg89cz8/image/upload/w_200,q_auto,f_auto/v1777010969/team6_ja4bu4.png">
-    <h3>Rajgarh Super Giants</h3>
+    <h3>RAJGARH SUPER GIANTS</h3>
 </a>
 
     </div>
@@ -710,25 +730,25 @@ body::before {
         <!-- 1️⃣ REGISTERED PLAYERS -->
         <a href="/players/" class="highlight-box left">
             <h3 class="counter" data-target="120">0+</h3>
-            <p>Registered Players</p>
+            <p>REGISTERED PLAYERS</p>
         </a>
 
         <!-- 2️⃣ TEAMS -->
         <a href="/teams/" class="highlight-box left">
-            <h3>6 Teams</h3>
+            <h3>6 TEAMS</h3>
             <p>Competitive Franchises</p>
         </a>
 
         <!-- 3️⃣ PURSE (optional page ya disable) -->
         <a href="#" class="highlight-box right">
             <h3>₹35K</h3>
-            <p>Initial Purse</p>
+            <p>INITIAL PURSE</p>
         </a>
 
         <!-- 4️⃣ AUCTION -->
         <a href="/auction/" class="highlight-box right live">
-            <h3>Live Auction</h3>
-            <p>Real-time Bidding</p>
+            <h3>LIVE AUCTION</h3>
+            <p>REAL-TIME BIDING</p>
         </a>
 
     </div>
