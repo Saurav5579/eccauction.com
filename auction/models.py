@@ -60,6 +60,15 @@ class Player(models.Model):
     is_unsold = models.BooleanField(default=False)
     is_retained = models.BooleanField(default=False)
 
+    # 🔁 ROUND SYSTEM (🔥 NEW ADD)
+    round_number = models.IntegerField(
+        default=1,
+        choices=[
+            (1, "Round 1"),
+            (2, "Re-Auction")
+        ]
+    )
+
     # 🖼️ IMAGE (Cloudinary)
     image = CloudinaryField('image', null=True, blank=True)
 
@@ -74,7 +83,7 @@ class Player(models.Model):
         if self.image:
             return self.image.url
         return "https://res.cloudinary.com/demo/image/upload/sample.jpg"
-
+    
     # ======================================
     # 🔒 RETAIN FUNCTION
     # ======================================

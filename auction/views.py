@@ -147,60 +147,70 @@ def place_bid(request, player_id):
 
 
 
-# 🔥 SELL PLAYER (FINAL + ANIMATION READY)
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.db import transaction
+from .models import Player, Team
+
+# 🔥 SELL PLAYER (FINAL FIXED)
+@transaction.atomic
 def sell_player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
 
-    if request.method == "POST":
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request"}, status=400)
 
-        # ❌ Already sold check
-        if player.is_sold:
-            return JsonResponse({"error": "Player already sold"}, status=400)
+    # ❌ Already sold check
+    if player.is_sold:
+        return JsonResponse({"error": "Player already sold"}, status=400)
 
-        team_id = request.POST.get("team_id")
-        bid = request.POST.get("bid")
+    team_id = request.POST.get("team_id")
+    bid = request.POST.get("bid")
 
-        if not team_id:
-            return JsonResponse({"error": "No team selected"}, status=400)
+    if not team_id:
+        return JsonResponse({"error": "No team selected"}, status=400)
 
-        team = get_object_or_404(Team, id=team_id)
+    team = get_object_or_404(Team, id=team_id)
 
-        # 💰 FINAL PRICE LOGIC
-        if bid:
-            try:
-                final_price = int(bid)
-            except:
-                return JsonResponse({"error": "Invalid bid"}, status=400)
-        else:
-            # 👉 Wheel / auto case
-            final_price = player.current_bid if player.current_bid > 0 else player.base_price
+    # 💰 FINAL PRICE LOGIC
+    if bid:
+        try:
+            final_price = int(bid)
+        except ValueError:
+            return JsonResponse({"error": "Invalid bid"}, status=400)
+    else:
+        final_price = player.current_bid if player.current_bid > 0 else player.base_price
 
-        # ❌ Purse check
-        if team.purse < final_price:
-            return JsonResponse({"error": "Not enough purse"}, status=400)
+    # ❌ Purse check
+    if team.purse < final_price:
+        return JsonResponse({"error": "Not enough purse"}, status=400)
 
-        # ✅ UPDATE PLAYER
-        player.current_bid = final_price
-        player.sold_price = final_price
-        player.is_sold = True
-        player.team = team
-        player.save()
+    # ===============================
+    # 🔥 MAIN FIX (VERY IMPORTANT)
+    # ===============================
+    player.is_sold = True
+    player.is_unsold = False      # ✅ UNSOLD reset (core bug fix)
+    player.team = team
+    player.sold_price = final_price
+    player.current_bid = final_price
 
-        # 💰 CUT TEAM PURSE
-        team.purse -= final_price
-        team.save()
+    # optional: round reset (clean state)
+    player.round_number = 1
 
-        # 🎯 RESPONSE (ANIMATION USE)
-        return JsonResponse({
-            "success": True,
-            "player_name": player.name,
-            "team_name": team.name,
-            "player_image": player.image_url,
-            "amount": final_price
-        })
+    player.save()
 
-    return JsonResponse({"error": "Invalid request"}, status=400)
+    # 💰 CUT TEAM PURSE
+    team.purse -= final_price
+    team.save()
 
+    # 🎯 RESPONSE (ANIMATION USE)
+    return JsonResponse({
+        "success": True,
+        "player_name": player.name,
+        "team_name": team.name,
+        "player_image": player.image_url,
+        "amount": final_price
+    })
 
 # ❌ MARK UNSOLD (OPTIONAL)
 def mark_unsold(request, player_id):
@@ -317,3 +327,94 @@ def temp_login(request):
         User.objects.create_superuser('admin', 'admin@gmail.com', 'admin123')
         return HttpResponse("Admin created successfully ✅")
     return HttpResponse("Admin already exists 👍")
+
+
+from django.http import JsonResponse
+from .models import Player
+import random
+
+
+# ===============================
+# ❌ UNSOLD PLAYER
+# ===============================
+from django.http import JsonResponse
+from .models import Player
+
+def unsold_player(request, player_id):
+
+    if request.method == "POST":
+        try:
+            player = Player.objects.get(id=player_id)
+
+            # 🔥 UNSOLD LOGIC
+            player.is_unsold = True
+            player.is_sold = False
+            player.is_retained = False
+
+            player.current_bid = 0
+            player.sold_price = None
+            player.team = None
+
+            # 🔁 MOVE TO RE-AUCTION ROUND
+            player.round_number = 2
+
+            player.save()
+
+            return JsonResponse({
+                "success": True,
+                "message": f"{player.name} moved to re-auction"
+            })
+
+        except Player.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Player not found"
+            })
+
+    return JsonResponse({
+        "success": False,
+        "error": "Invalid request"
+    })
+
+# ===============================
+# 🔥 NEXT PLAYER (RANDOM)
+# ===============================
+def next_player(request):
+
+    # ===============================
+    # 🔥 ROUND 1 (Normal Players)
+    # ===============================
+    player = Player.objects.filter(
+        is_sold=False,
+        is_unsold=False,
+        round_number=1
+    ).order_by('id').first()
+
+    # ===============================
+    # 🔥 ROUND 2 (UNSOLD Players)
+    # ===============================
+    if not player:
+        player = Player.objects.filter(
+            is_sold=False,
+            is_unsold=True,
+            round_number=2
+        ).order_by('id').first()
+
+    # ===============================
+    # 🏁 FINISHED
+    # ===============================
+    if not player:
+        return JsonResponse({
+            "finished": True
+        })
+
+    return JsonResponse({
+        "finished": False,
+        "id": player.id,
+        "player_code": player.player_id,
+        "name": player.name,
+        "role": player.role,
+        "base_price": player.base_price,
+        "current_bid": player.current_bid,
+        "image": player.image_url
+    })

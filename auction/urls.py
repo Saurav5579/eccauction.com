@@ -30,14 +30,27 @@ urlpatterns = [
 
     # 📋 ALL PLAYERS
     path('players/', views.all_players, name='all_players'),
+    
+     # 🔥 PLAYERS
+    path('players/', views.all_players, name='all_players'),
 
-
+    # 🔒 RETAIN
     path('retain-player/<int:player_id>/', views.retain_player, name='retain_player'),
 
+    # 🔄 RESET AUCTION
     path('reset-auction/', views.reset_full_auction, name='reset_auction'),
-        
-   path('temp-login/', temp_login),
+
+    # 🔐 TEMP LOGIN
+    path('temp-login/', temp_login, name='temp_login'),
+
+    # ❌ UNSOLD
+    path('unsold_player/<int:player_id>/', views.unsold_player, name='unsold_player'),
+
+    # 🔥 NEXT PLAYER
+    path('next-player/', views.next_player, name='next_player'),
+
 ]
+
 
 
 # 📁 MEDIA FILES (IMAGES FIX)

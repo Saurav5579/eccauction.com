@@ -1417,6 +1417,34 @@ body::before {
     width: 115px;
     height: 115px;
 }
+.unsold-btn {
+    background: linear-gradient(135deg, #374151, #111827);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.unsold-btn:hover {
+    background: linear-gradient(135deg, #6b7280, #1f2937);
+    transform: scale(1.05);
+}
+
+/* Status label */
+.unsold-status {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff4d4d;
+    text-align: center;
+
+    text-shadow:
+        0 0 10px rgba(255,0,0,0.8),
+        0 0 20px rgba(255,0,0,0.5);
+}
 </style>
 
 <h1 class="auction-title">
@@ -1481,7 +1509,7 @@ body::before {
 
 <div class="player-actions">
 
-{% if not player.is_sold %}
+{% if not player.is_sold and not player.is_unsold %}
 
     <div class="action-grid">
 
@@ -1491,15 +1519,21 @@ body::before {
             <!-- 🔥 TOP ACTION BUTTONS -->
             <div class="top-actions">
 
+                <!-- ✅ SOLD -->
                 <button class="sold-btn" onclick="sellPlayer('{{ player.id }}')">
                     🔥 SOLD PLAYER
                 </button>
 
-                <!-- 🔥 FULL RESET BUTTON -->
-               <button class="full-reset-btn"
-        onclick="if(confirm('⚠️ Full auction reset karna hai?')) { window.location.href='/reset-auction/'; }">
-    ♻️ FULL RESET
-</button>
+                <!-- ❌ UNSOLD (NEW) -->
+                <button class="unsold-btn" onclick="unsoldPlayer('{{ player.id }}')">
+                    ❌ UNSOLD
+                </button>
+
+                <!-- 🔥 FULL RESET -->
+                <button class="full-reset-btn"
+                    onclick="if(confirm('⚠️ Full auction reset karna hai?')) { window.location.href='/reset-auction/'; }">
+                    ♻️ FULL RESET
+                </button>
 
             </div>
 
@@ -1513,11 +1547,17 @@ body::before {
     </div>
 
 {% else %}
+
     {% if player.is_retained %}
         <div class="sold retained">🔒 RETAINED</div>
+
+    {% elif player.is_unsold %}
+        <div class="unsold-status">❌ UNSOLD</div>
+
     {% else %}
         <div class="sold">🔥 SOLD</div>
     {% endif %}
+
 {% endif %}
 
 </div>
@@ -2463,36 +2503,153 @@ function playBidSound() {
 }
 
 
+
 /* ===============================
-   🔊 SOLD / RETAIN SOUND
+   🔊 SOLD SOUND (ONLY FOR SOLD)
 ================================ */
 function playSoldSound() {
 
     let sound = document.getElementById("sold-sound");
 
-    if (!sound) {
-        console.log("❌ sold sound not found");
-        return;
-    }
+    if (!sound) return;
 
-    sound.pause();          // 🔥 reset
+    sound.pause();
     sound.currentTime = 0;
 
-    sound.play()
-    .then(() => {
-        console.log("✅ sound played");
+    sound.play().catch(() => {});
+}
+
+
+/* ===============================
+   ❌ UNSOLD SOUND (REMOVED 🔥)
+================================ */
+// ❌ intentionally empty (no sound)
+function playUnsoldSound() {
+    // NO SOUND for UNSOLD
+}
+
+
+/* ===============================
+   🔐 SAFE JSON
+================================ */
+function safeJSON(res) {
+    if (!res.ok) {
+        throw new Error("HTTP error " + res.status);
+    }
+    return res.json();
+}
+
+
+/* ===============================
+   🔥 LOAD NEXT PLAYER
+================================ */
+function loadNextPlayer() {
+
+    fetch("/next-player/")
+    .then(safeJSON)
+    .then(player => {
+
+        if (player.finished) {
+            alert("🏁 Auction Finished");
+            location.reload();
+            return;
+        }
+
+        // 🔥 UPDATE UI
+        document.querySelector(".player-name").innerText = player.name;
+        document.querySelector(".player-role").innerText = player.role;
+
+        document.querySelector(".base-price").innerText =
+            "Base Price: ₹" + player.base_price;
+
+        let bidBox = document.querySelector(".current-bid");
+
+        bidBox.innerText = "₹" + player.current_bid;
+        bidBox.style.color = "#22c55e";   // reset green
+        bidBox.style.fontWeight = "bold";
+
+        document.querySelector(".player-img-rect").src = player.image;
+
+        // 🔥 RESET STATE
+        window.currentPlayerId = player.id;
+        window.lastTeamId = null;
+        window.spinCandidates = [];
+
+        // 🔥 RESET TEAM UI
+        document.querySelectorAll(".team-btn").forEach(btn => {
+            btn.classList.remove("active-team");
+        });
+
+        console.log("🚀 Next player:", player.name);
+
+    })
+    .catch(err => console.error("❌ NEXT PLAYER ERROR:", err));
+}
+
+
+/* ===============================
+   ❌ UNSOLD BUTTON (FINAL CLEAN 🔥)
+================================ */
+
+let allowNextClick = false;
+
+window.unsoldPlayer = function(playerId) {
+
+    let id = window.currentPlayerId || playerId;
+
+    console.log("🔥 UNSOLD CLICKED", id);
+
+    fetch(`/unsold_player/${id}/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": getCSRFToken()
+        }
+    })
+    .then(safeJSON)
+    .then(data => {
+
+        if (data.success) {
+
+            let bidBox = document.querySelector(".current-bid");
+
+            // 🔥 SIMPLE UNSOLD TEXT (NO EFFECT)
+            bidBox.innerText = "❌ UNSOLD";
+            bidBox.style.color = "#ff4d4d";
+            bidBox.style.fontWeight = "bold";
+
+            console.log("✅ UNSOLD done");
+            console.log("👉 Click anywhere for next player");
+
+            // ❌ NO SOUND
+            // ❌ NO ANIMATION
+
+            allowNextClick = true;
+
+        } else {
+            alert(data.error || "Unsold failed");
+        }
+
     })
     .catch(err => {
-
-        console.log("⚠️ autoplay blocked:", err);
-
-        // 🔁 fallback: next click pe play hoga
-        document.body.addEventListener("click", () => {
-            sound.play().catch(()=>{});
-        }, { once: true });
-
+        console.error("❌ UNSOLD ERROR:", err);
     });
-}
+};
+
+
+/* ===============================
+   👉 CLICK ANYWHERE → NEXT PLAYER
+================================ */
+document.addEventListener("click", function () {
+
+    if (!allowNextClick) return;
+
+    allowNextClick = false;
+
+    console.log("🚀 Loading next player...");
+
+    loadNextPlayer();
+});
 /* ===============================
    🔐 CSRF
 ================================ */
